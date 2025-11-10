@@ -1,0 +1,684 @@
+:root {
+    --warna0: white;
+    --warna1: black;
+    --warna2: #753422;
+    --warna3: #B05B3B;
+    --warna4: #D79771;
+    --warna6: #FFEBC9;
+
+
+    --warna5: #FFF4E0;
+
+    /* --bs-primary: var(--warna3);
+    --bs-primary-rgb: 94, 147, 108;
+
+    --bs-success: var(--warna4);
+    --bs-success-rgb: 147, 218, 151;
+
+    --bs-info: var(--warna6);
+    --bs-warning: var(--warna5);
+    --bs-dark: var(--warna2);
+    --bs-light: var(--warna6);
+
+    --bs-body-bg: var(--warna6);
+    --bs-body-color: #1a1a1a;
+
+
+    --bs-btn-bg: var(--warna3);
+    --bs-btn-border-color: var(--warna3);
+    --bs-btn-hover-bg: var(--warna3);
+    --bs-btn-hover-border-color: var(--warna2);
+    --bs-btn-active-bg: var(--warna2); */
+
+}
+
+.form-check-input {
+    accent-color: var(--warna3) !important;
+    /* ubah ke warna kamu */
+    width: 22px;
+    height: 22px;
+    margin: 0 8px;
+    cursor: pointer;
+}
+
+/* Kalau ingin versi lebih tua dari browser tetap bisa */
+.form-check-input:checked {
+    background-color: var(--warna3) !important;
+    border-color: var(--warna3) !important;
+}
+
+/* Fokus ring saat aktif (outline biru default) diganti juga */
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--warna4), transparent 50%) !important;
+    border-color: var(--warna3) !important;
+}
+
+/* Navbar */
+.navbar.bg-primary {
+    background-color: var(--warna2) !important;
+}
+
+.navbar-dark .navbar-nav .nav-link.active {
+    color: var(--warna6) !important;
+    font-weight: 600;
+}
+
+.navbar-dark .navbar-brand {
+    color: var(--warna6) !important;
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--warna2) !important;
+}
+
+/* Tombol utama */
+.btn-primary {
+    background-color: var(--warna3) !important;
+    border-color: var(--warna3) !important;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--warna2) !important;
+    border-color: var(--warna2) !important;
+}
+
+/* Tabel */
+.table th {
+    background-color: var(--warna3);
+    color: white;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: var(--warna6);
+}
+
+.table-striped>tbody>tr:nth-of-type(even) {
+    background-color: var(--warna5);
+}
+
+/* Latar belakang umum */
+body {
+    background:
+        linear-gradient(rgba(255, 244, 227, 0.85),
+            rgba(255, 244, 227, 0.85)),
+        var(--bg-image) center center / cover no-repeat;
+
+    background-color: var(--warna6) !important;
+}
+
+
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Times New Roman';
+    font-size: 17px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+
+.btn-close {
+    transition: all 0.2s ease;
+}
+
+.btn-close:hover,
+.btn-close:focus,
+.btn-close:active {
+    background-color: var(--warna5) !important;
+    color: var(--warna1) !important;
+    --bs-btn-close-focus-shadow: none;
+}
+
+html {
+    background-color: var(--warna6);
+    font-size: 80%;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+i,
+.fa,
+.bi {
+    vertical-align: middle;
+    line-height: 1;
+    display: inline-block;
+}
+
+.main-content .custom-alert-1 {
+    background-color: var(--warna3);
+    color: white;
+    border: 4px solid var(--warna2);
+}
+
+.main-content .custom-alert-2 {
+    background-color: var(--warna4);
+    color: white;
+    border: 4px solid var(--warna2);
+
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+}
+
+.offcanvas.offcanvas-start {
+    background: linear-gradient(180deg, var(--warna2), var(--warna3)) !important;
+    color: var(--warna0) !important;
+    padding: 20px;
+}
+
+.offcanvas.offcanvas-start .offcanvas-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.offcanvas.offcanvas-start .offcanvas-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.offcanvas.offcanvas-start .offcanvas-body {
+    padding: 0;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.offcanvas.offcanvas-start .offcanvas-body ::-webkit-scrollbar {
+    display: none;
+}
+
+.offcanvas.offcanvas-start ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.offcanvas.offcanvas-start ul li {
+    margin: 10px 0;
+}
+
+.offcanvas.offcanvas-start ul li a {
+    color: var(--warna0);
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.3s;
+    font-size: 16px;
+}
+
+.offcanvas.offcanvas-start ul li a:hover,
+.offcanvas.offcanvas-start ul li.active a {
+    background-color: var(--warna3);
+    color: var(--warna0);
+}
+
+.offcanvas.offcanvas-start i {
+    margin-right: 10px;
+}
+
+.bg-custom {
+    background: linear-gradient(180deg, var(--warna3), var(--warna4));
+    border-radius: 20px;
+    position: fixed;
+    left: 0;
+    width: calc(100% - 280px);
+    margin-left: 265px;
+    height: 60px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    width: 230px;
+    height: 95%;
+    background: linear-gradient(145deg, var(--warna2), var(--warna4));
+    border-radius: 20px;
+    padding: 10px 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 1000;
+    margin: auto;
+}
+
+
+/* Logo */
+.sidebar .logo-container {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.sidebar .logo-container img {
+    width: 80px;
+    height: auto;
+    border-radius: 100%;
+    border: 4px solid var(--warna4);
+}
+
+/* Menu */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 8px 0;
+}
+
+.sidebar ul li a {
+    color: #bdbdbd;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.sidebar ul li a i {
+    width: 22px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Hover & Active */
+.sidebar ul li a:hover,
+.sidebar ul li.active a {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    transform: translateX(40px);
+    border-radius: 50px;
+}
+
+/* Footer / user info (kalau ada di bawah) */
+.sidebar-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-footer img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.sidebar-footer .user-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.sidebar-footer .user-info small {
+    color: #aaa;
+}
+
+/* Responsif: hilang di HP */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+}
+
+
+.tu-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.tu-info i {
+    font-size: 20px;
+    color: var(--warna1);
+}
+
+.main-content {
+    min-height: 100vh;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+
+}
+
+.main h1 {
+    font-size: 28px;
+    color: var(--dark-color);
+    margin-left: 10px;
+}
+
+main .card {
+    background: var(--warna0);
+
+    box-shadow: none;
+    border-bottom: 10px solid var(--warna2);
+    max-height: 500px;
+    overflow-y: auto;
+    margin: 0;
+    border-radius: 16px;
+}
+
+.card-custom {
+    min-height: 290px;
+}
+
+@media (max-width: 768px) {
+    .card-custom {
+        min-height: auto !important;
+        /* agar di HP tidak terlalu tinggi */
+    }
+}
+
+
+.table-wrapper {
+    border: 2px solid var(--warna2);
+    /* warna tepi */
+    border-radius: 10px;
+    overflow: hidden;
+    /* jaga radius tetap halus */
+    background: var(--warna2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table-bordered {
+    border: 2px solid #7a3e1d !important;
+    /* Warna utama border */
+    border-radius: 10px !important;
+    overflow: hidden;
+    /* Supaya radius tidak terpotong */
+}
+
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    /* ubah dari collapse ke separate */
+    border-spacing: 0;
+    /* hilangkan jarak antar sel */
+}
+
+th,
+td {
+    border: 1px solid #7a3e1d;
+    padding: 8px 12px;
+}
+
+/* Hilangkan border ganda di sisi luar */
+th:first-child,
+td:first-child {
+    border-left: none;
+}
+
+th:last-child,
+td:last-child {
+    border-right: none;
+}
+
+tr:first-child th {
+    border-top: none;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+
+thead {
+    background-color: var(--warna2);
+    padding: 20px;
+    box-shadow: none;
+    width: 100%;
+    margin: auto;
+    color: var(--warna0);
+
+}
+
+tbody {
+    background-color: var(--warna0);
+}
+
+tfoot {
+    background-color: var(--warna2);
+    color: var(--warna0);
+}
+
+
+main .btn-ukuran {
+    max-width: 200px;
+}
+
+input.form-control,
+select.form-select,
+textarea.form-control {
+    border: 4px solid var(--warna2);
+}
+
+input.form-control:focus,
+select.form-select:focus,
+textarea.form-control:focus {
+    border-color: var(--warna2);
+    box-shadow: none;
+    outline: none;
+}
+
+input[readonly] {
+    background-color: var(--warna4);
+}
+
+select[disabled] {
+    background-color: var(--warna4) !important;
+    color: var(--warna1) !important;
+    cursor: not-allowed;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none;
+}
+
+
+input[readonly]:focus,
+input[readonly]:hover {
+    border-color: var(--warna2);
+    background-color: var(--warna4);
+    box-shadow: none;
+    outline: none;
+    cursor: default;
+
+}
+
+
+/* Style dasar tombol "Pilih File" */
+input[type="file"]::file-selector-button,
+input[type="file"]::-webkit-file-upload-button {
+    background-color: var(--warna2);
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Hover, focus, active efek */
+input[type="file"]:hover::file-selector-button,
+input[type="file"]:focus::file-selector-button,
+input[type="file"]:active::file-selector-button,
+input[type="file"]:hover::-webkit-file-upload-button,
+input[type="file"]:focus::-webkit-file-upload-button,
+input[type="file"]:active::-webkit-file-upload-button {
+    background-color: var(--warna5) !important;
+    border-color: var(--warna2) !important;
+    color: var(--warna1) !important;
+    outline: none;
+    box-shadow: none;
+}
+
+
+.alas {
+    margin-top: 90px;
+    background: linear-gradient(180deg, var(--warna5), var(--warna6));
+    border-radius: 20px;
+    border: 4px solid var(--warna2);
+    padding: 10px;
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        margin-left: 250px;
+    }
+}
+
+main .btn-add {
+    background-color: var(--warna2);
+    border: 4px solid var(--warna2);
+    color: var(--warna0);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+main .btn-add:hover,
+main .btn-add:active,
+main .btn-add:focus {
+    background-color: var(--warna5);
+    border-color: var(--warna2);
+    color: var(--warna1);
+}
+
+
+main .btn-sm-1 {
+    background-color: var(--warna3);
+    border: 4px solid var(--warna3);
+    color: var(--warna0);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+main .btn-sm-2 {
+    background-color: var(--warna4);
+    border: 4px solid var(--warna4);
+    color: var(--warna0);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+main .btn-sm-1:hover,
+main .btn-sm-1:active,
+main .btn-sm-1:focus,
+main .btn-sm-2:hover,
+main .btn-sm-2:active,
+main .btn-sm-2:focus {
+    background-color: var(--warna5) !important;
+    border-color: var(--warna2) !important;
+    color: var(--warna1) !important;
+    outline: none;
+    box-shadow: none;
+}
+
+.aksi-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.aksi-buttons a {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-box {
+    max-width: 400px;
+    width: 100%;
+}
+
+.video-frame {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* Membuat video berbentuk kotak */
+    object-fit: cover;
+    /* Supaya gambar tetap bagus */
+}
+
+.baris-terisi {
+    background-color: var(--warna4) !important;
+}
+
+.baris-merah {
+    background-color: #ffcccc !important;
+    color: #990000 !important;
+}
+
+/* Area daftar isi biar bisa discroll */
+#lessonTree.scroll-area {
+    max-height: 65vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #c59a6d #f7f7f7;
+}
+
+/* Scrollbar style (untuk Chrome/Edge) */
+#lessonTree.scroll-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+#lessonTree.scroll-area::-webkit-scrollbar-thumb {
+    background-color: #c59a6d;
+    border-radius: 4px;
+}
+
+
+@media (min-width: 768px) {
+    .video-box {
+        width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    .bg-custom {
+        width: 100%;
+        margin-left: 0;
+        border-radius: 20px;
+        justify-content: center;
+    }
+
+
+}
