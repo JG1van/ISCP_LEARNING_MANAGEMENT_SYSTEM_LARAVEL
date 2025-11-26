@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Model;
 class Mapel extends Model
 {
 	protected $table = 'mapels';
-	public $incrementing = false;
+	public $incrementing = true;
 	public $timestamps = false;
 
 	protected $casts = [

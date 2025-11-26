@@ -8,8 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('subthemes', function (Blueprint $table) {
-            $table->integer('id', false, false)->nullable(false);
-            $table->primary('id');
+            $table->integer('id')->autoIncrement();
             $table->integer('lesson_id')->nullable(false);
             $table->integer('theme_id')->nullable(false);
             $table->integer('subtheme');

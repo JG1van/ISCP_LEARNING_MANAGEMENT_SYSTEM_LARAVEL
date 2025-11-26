@@ -10,21 +10,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+
         DB::table('admins')->insert([
-            [
-                'id' => 0,
-                'name' => 'Sistem',
-                'username' => 'system',
-                'password' => Hash::make('admin1234'),
-                'role' => 0,
-                'date_in' => now()->format('Y-m-d'),
-                'position' => 'System Process',
-                'phone' => null,
-                'img' => null,
-                'login_at' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
             [
                 'id' => 1,
                 'name' => 'Admin A',
@@ -32,7 +19,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('admin1234'),
                 'role' => 1,
                 'date_in' => now()->format('Y-m-d'),
-                'position' => 'Pemilik',
+                'position' => 'Super-Admin',
                 'phone' => '081111111111',
                 'img' => null,
                 'login_at' => null,
@@ -42,11 +29,11 @@ class DatabaseSeeder extends Seeder
             [
                 'id' => 2,
                 'name' => 'Admin B',
-                'username' => 'adminmaster',
+                'username' => 'Admin',
                 'password' => Hash::make('admin1234'),
                 'role' => 2,
                 'date_in' => now()->format('Y-m-d'),
-                'position' => 'Admin Master',
+                'position' => 'Admin',
                 'phone' => '082222222222',
                 'img' => null,
                 'login_at' => null,
@@ -56,11 +43,11 @@ class DatabaseSeeder extends Seeder
             [
                 'id' => 3,
                 'name' => 'Admin C',
-                'username' => 'adminoperasional',
+                'username' => 'Operasional',
                 'password' => Hash::make('admin1234'),
                 'role' => 3,
                 'date_in' => now()->format('Y-m-d'),
-                'position' => 'Admin Operasional',
+                'position' => 'Operasional',
                 'phone' => '083333333333',
                 'img' => null,
                 'login_at' => null,
@@ -70,11 +57,11 @@ class DatabaseSeeder extends Seeder
             [
                 'id' => 4,
                 'name' => 'Admin D',
-                'username' => 'adminkonten',
+                'username' => 'Konten-Pembelajaran',
                 'password' => Hash::make('admin1234'),
                 'role' => 4,
                 'date_in' => now()->format('Y-m-d'),
-                'position' => 'Admin Konten',
+                'position' => 'Konten-Pembelajaran',
                 'phone' => '084444444444',
                 'img' => null,
                 'login_at' => null,
@@ -84,11 +71,11 @@ class DatabaseSeeder extends Seeder
             [
                 'id' => 5,
                 'name' => 'Admin E',
-                'username' => 'adminlayananpengguna',
+                'username' => 'Layanan-Pengguna',
                 'password' => Hash::make('admin1234'),
                 'role' => 5,
                 'date_in' => now()->format('Y-m-d'),
-                'position' => 'Admin Layanan Pengguna',
+                'position' => 'Layanan-Pengguna',
                 'phone' => '085555555555',
                 'img' => null,
                 'login_at' => null,
@@ -96,6 +83,7 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
+
         DB::table('exercise_types')->insert([
             ['id' => 1, 'kode' => 'UH', 'name' => 'Ulangan Harian'],
             ['id' => 2, 'kode' => 'PTS', 'name' => 'Penilaian Tengah Semester'],

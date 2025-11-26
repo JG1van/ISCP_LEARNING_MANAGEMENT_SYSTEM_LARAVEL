@@ -9,8 +9,7 @@ return new class extends Migration {
     {
         Schema::create('post_child_comments', function (Blueprint $table) {
             // Gunakan integer agar seragam dengan tabel lain
-            $table->integer('id', false, false)->nullable(false);
-            $table->primary('id');
+            $table->integer('id')->autoIncrement();
 
             $table->integer('post_comment_id')->nullable(false);
             $table->integer('user_id')->nullable();

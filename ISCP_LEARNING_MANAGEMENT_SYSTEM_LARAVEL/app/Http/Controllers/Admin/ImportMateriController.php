@@ -29,7 +29,7 @@ class ImportMateriController extends Controller
     public function store(Request $request, $lesson_id)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,csv|max:4096',
+            'file' => 'required|mimes:xlsx|max:4096',
         ]);
 
         $file = $request->file('file');
@@ -47,7 +47,7 @@ class ImportMateriController extends Controller
             $spreadsheet = $reader->load($file->getRealPath());
         } catch (\Throwable $e) {
             return back()->withErrors([
-                'file' => 'File tidak dapat dibaca. Pastikan format .xlsx atau .csv valid. (' . $e->getMessage() . ')'
+                'file' => 'File tidak dapat dibaca. Pastikan format .xlsx atau valid. (' . $e->getMessage() . ')'
             ]);
         }
 

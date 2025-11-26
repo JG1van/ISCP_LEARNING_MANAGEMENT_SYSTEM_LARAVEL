@@ -44,7 +44,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
 	protected $table = 'posts';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

@@ -26,7 +26,7 @@
                     <th>No</th>
                     <th>Kode</th>
                     <th>Nama Tipe Latihan</th>
-                    <th style="width:180px;">Aksi</th>
+                    <th style="width:140px;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="typeBody">

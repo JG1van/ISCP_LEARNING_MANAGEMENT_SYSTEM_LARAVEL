@@ -42,9 +42,9 @@ class MapelController extends Controller
                 'name' => 'required|string|max:20|unique:mapels,name',
             ],
             [
-                'name.required' => 'Nama Kategori Pelajaran wajib diisi.',
-                'name.unique' => 'Nama Kategori Pelajaran sudah digunakan, silakan pilih nama lain.',
-                'name.max' => 'Nama Kategori Pelajaran maksimal 20 karakter.',
+                'name.required' => 'Nama Mata Pelajaran wajib diisi.',
+                'name.unique' => 'Nama Mata Pelajaran sudah digunakan, silakan pilih nama lain.',
+                'name.max' => 'Nama Mata Pelajaran maksimal 20 karakter.',
             ]
         );
 
@@ -56,24 +56,19 @@ class MapelController extends Controller
         }
 
         try {
-            // Buat ID manual (karena tabel tidak auto_increment)
-            $lastId = Mapel::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
-
             $mapel = Mapel::create([
-                'id' => $newId,
                 'name' => $request->name,
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Kategori Pelajaran berhasil ditambahkan.',
+                'message' => 'Mata Pelajaran berhasil ditambahkan.',
                 'data' => $mapel
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menambahkan Kategori Pelajaran: ' . $e->getMessage(),
+                'message' => 'Gagal menambahkan Mata Pelajaran: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -88,7 +83,7 @@ class MapelController extends Controller
         if (!$mapel) {
             return response()->json([
                 'success' => false,
-                'message' => 'Kategori Pelajaran tidak ditemukan.',
+                'message' => 'Mata Pelajaran tidak ditemukan.',
             ], 404);
         }
 
@@ -108,7 +103,7 @@ class MapelController extends Controller
         if (!$mapel) {
             return response()->json([
                 'success' => false,
-                'message' => 'Kategori Pelajaran tidak ditemukan.',
+                'message' => 'Mata Pelajaran tidak ditemukan.',
             ], 404);
         }
 
@@ -119,9 +114,9 @@ class MapelController extends Controller
                 'name' => 'required|string|max:20|unique:mapels,name,' . $id,
             ],
             [
-                'name.required' => 'Nama Kategori Pelajaran wajib diisi.',
-                'name.unique' => 'Nama Kategori Pelajaran sudah digunakan oleh Kategori Pelajaran lain.',
-                'name.max' => 'Nama Kategori Pelajaran maksimal 20 karakter.',
+                'name.required' => 'Nama Mata Pelajaran wajib diisi.',
+                'name.unique' => 'Nama Mata Pelajaran sudah digunakan oleh Mata Pelajaran lain.',
+                'name.max' => 'Nama Mata Pelajaran maksimal 20 karakter.',
             ]
         );
 
@@ -137,13 +132,13 @@ class MapelController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Kategori Pelajaran berhasil diperbarui.',
+                'message' => 'Mata Pelajaran berhasil diperbarui.',
                 'data' => $mapel
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal memperbarui Kategori Pelajaran: ' . $e->getMessage(),
+                'message' => 'Gagal memperbarui Mata Pelajaran: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -158,18 +153,31 @@ class MapelController extends Controller
         if (!$mapel) {
             return response()->json([
                 'success' => false,
-                'message' => 'Kategori Pelajaran tidak ditemukan.',
+                'message' => 'Mata Pelajaran tidak ditemukan.',
             ], 404);
         }
 
-        // Cek apakah mapel dipakai di tabel pelajaran
-        $lessons = Lesson::where('mapel_id', $id)->pluck('name');
+        $relatedData = [];
 
-        if ($lessons->count() > 0) {
-            $lessonList = $lessons->implode(', ');
+        // Cek apakah mapel digunakan di tabel lain
+        if (\App\Models\Lesson::where('mapel_id', $id)->exists()) {
+            $relatedData[] = 'pelajaran';
+        }
+
+        if (\App\Models\Competence::where('mapel_id', $id)->exists()) {
+            $relatedData[] = 'kompetensi';
+        }
+
+        if (\App\Models\Post::where('mapel_id', $id)->exists()) {
+            $relatedData[] = 'postingan';
+        }
+
+        // Jika masih digunakan, tolak penghapusan
+        if (!empty($relatedData)) {
+            $list = implode(', ', $relatedData);
             return response()->json([
                 'success' => false,
-                'message' => 'Kategori Pelajaran tidak dapat dihapus karena masih digunakan oleh pelajaran: ' . $lessonList,
+                'message' => "Mata Pelajaran ini tidak dapat dihapus karena masih digunakan pada data: {$list}.",
             ], 409);
         }
 
@@ -178,13 +186,21 @@ class MapelController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Kategori Pelajaran berhasil dihapus.',
+                'message' => 'Mata Pelajaran berhasil dihapus.',
             ]);
         } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mata Pelajaran tidak dapat dihapus karena masih terhubung dengan data lain.',
+                ], 409);
+            }
+
             return response()->json([
                 'success' => false,
-                'message' => 'Kategori Pelajaran gagal dihapus: ' . $e->getMessage(),
+                'message' => 'Gagal menghapus Mata Pelajaran: ' . $e->getMessage(),
             ], 500);
         }
     }
+
 }

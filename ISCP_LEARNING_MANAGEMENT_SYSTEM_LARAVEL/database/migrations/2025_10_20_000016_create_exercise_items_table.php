@@ -12,8 +12,7 @@ return new class extends Migration {
     {
         Schema::create('exercise_items', function (Blueprint $table) {
             // Gunakan integer() agar sama dengan tabel lain (bukan bigint)
-            $table->integer('id', false, false)->nullable(false);
-            $table->primary('id');
+            $table->integer('id')->autoIncrement();
 
             $table->integer('admin_id')->nullable();
             $table->integer('user_id')->nullable();

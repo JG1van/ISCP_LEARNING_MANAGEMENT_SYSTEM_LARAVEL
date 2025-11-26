@@ -26,11 +26,11 @@
                     <th>No</th>
                     <th>Serial</th>
                     <th>Produk</th>
-                    <th>Paket</th>
+                    <th>Paket Kelas</th>
                     <th>Aktif (bulan)</th>
                     <th>Expired</th>
                     <th>Pengguna</th>
-                    <th style="width:300px;">Aksi</th>
+                    <th style="width:180px;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="serialBody">
@@ -112,7 +112,7 @@
                         </select>
                     </div>
                     <div class="col-6">
-                        <label class="form-label">Paket</label>
+                        <label class="form-label">Paket Kelas</label>
                         <select name="paket" class="form-select" required>
                             <option value="">== Pilih Paket ==</option>
                             @for ($i = 1; $i <= 9; $i++)
@@ -168,7 +168,7 @@
                         </select>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">Paket</label>
+                        <label class="form-label">Paket Kelas</label>
                         <select id="editPaket" name="paket" class="form-select" required>
                             @for ($i = 1; $i <= 9; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>

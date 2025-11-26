@@ -59,12 +59,10 @@ class ExerciseTypeController extends Controller
                 ], 422);
             }
 
-            // Buat ID manual
-            $lastId = ExerciseType::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
+
 
             $type = ExerciseType::create([
-                'id' => $newId,
+
                 'kode' => $request->kode,
                 'name' => $request->name,
             ]);
@@ -167,6 +165,24 @@ class ExerciseTypeController extends Controller
             ], 404);
         }
 
+        $relatedData = [];
+
+        if (\App\Models\Exercise::where('exercise_type_id', $id)->exists()) {
+            $relatedData[] = 'soal';
+        }
+
+        if (\App\Models\ExerciseItem::where('exercise_type_id', $id)->exists()) {
+            $relatedData[] = 'item soal';
+        }
+
+        if (!empty($relatedData)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tipe latihan tidak dapat dihapus karena masih digunakan di: ' . implode(', ', $relatedData),
+            ], 409);
+        }
+
+
         try {
             $type->delete();
 
@@ -175,17 +191,11 @@ class ExerciseTypeController extends Controller
                 'message' => 'Tipe latihan berhasil dihapus.',
             ]);
         } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Tipe latihan tidak dapat dihapus karena masih terhubung dengan data lain.',
-                ], 409);
-            }
-
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menghapus tipe latihan: ' . $e->getMessage(),
             ], 500);
         }
     }
+
 }

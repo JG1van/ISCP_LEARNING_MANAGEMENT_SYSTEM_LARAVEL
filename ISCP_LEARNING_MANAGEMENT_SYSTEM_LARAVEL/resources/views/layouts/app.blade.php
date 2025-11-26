@@ -123,7 +123,7 @@
                 $segmentCount = count(Request::segments());
             @endphp
 
-            @if ($segmentCount > 2 && Request::segment(1) === 'admin')
+            @if ($segmentCount > 3 && Request::segment(1) === 'admin')
                 <div class="mb-3">
                     <a href="{{ url()->previous() }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left me-2"></i> Kembali
@@ -146,11 +146,6 @@
 
     {{-- ================= SWEETALERT KONFIRMASI GLOBAL ================= --}}
     <script>
-        /**
-         * SweetAlert versi global untuk konfirmasi aksi
-         * @param {string} message - pesan konfirmasi
-         * @param {function} onConfirm - callback saat klik 'Ya'
-         */
         function showConfirm(message, onConfirm) {
             Swal.fire({
                 title: 'Konfirmasi',
@@ -168,11 +163,7 @@
             });
         }
 
-        /**
-         * SweetAlert versi toast (notifikasi cepat)
-         * @param {string} type - success, error, info, warning
-         * @param {string} message - pesan singkat
-         */
+
         function showToast(type, message) {
             const Toast = Swal.mixin({
                 toast: true,

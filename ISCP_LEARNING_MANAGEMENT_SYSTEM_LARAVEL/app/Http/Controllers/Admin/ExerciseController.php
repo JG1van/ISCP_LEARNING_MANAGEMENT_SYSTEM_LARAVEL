@@ -82,12 +82,9 @@ class ExerciseController extends Controller
                 ], 422);
             }
 
-            // Buat ID manual jika tabel tidak auto_increment
-            $lastId = Exercise::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
 
             $exercise = Exercise::create([
-                'id' => $newId,
+
                 'lesson_id' => $lesson_id,
                 'exercise_type_id' => $request->exercise_type_id,
                 'serial_id' => $request->serial_id,

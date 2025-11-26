@@ -8,8 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->integer('id', false, false)->nullable(false);
-            $table->primary('id');
+            $table->integer('id')->autoIncrement();
 
             $table->integer('serial_id')->nullable(false);
             $table->integer('user_id')->nullable(false);

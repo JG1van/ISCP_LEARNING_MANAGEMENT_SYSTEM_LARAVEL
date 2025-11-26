@@ -46,7 +46,7 @@ use Illuminate\Database\Eloquent\Model;
 class ExerciseItem extends Model
 {
 	protected $table = 'exercise_items';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

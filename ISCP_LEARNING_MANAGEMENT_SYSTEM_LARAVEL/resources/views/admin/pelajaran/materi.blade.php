@@ -82,17 +82,33 @@
                                                             <span>Materi {{ $item->number }}:</span> {{ $item->title }}
                                                             <div class="text-start mt-1">
                                                                 <small class="text-muted fst-italic">
-                                                                    <i class="far fa-user"></i> {{ $item->admin->name }}
+                                                                    <i class="far fa-user"></i>
+                                                                    {{ $item->admin->username ?? 'Tidak Diketahuin' }}
+                                                                </small>
+
+                                                                <small class="text-muted fst-italic">
+                                                                    <i class="far fa-calendar"></i>
+                                                                    {{ $item->created_at?->format('d M Y H:i') }}
                                                                 </small>
                                                             </div>
                                                         </div>
 
                                                         <div class="d-flex gap-2">
+
+                                                            <!-- TOMBOL PREVIEW -->
+                                                            <button class="btn btn-sm btn-primary"
+                                                                onclick="previewVideo('{{ base64_encode($item->embed) }}')">
+                                                                Video
+                                                            </button>
+
+
                                                             <button class="btn btn-sm-1"
                                                                 onclick="editItem('item', {{ $item->id }})">Edit</button>
+
                                                             <button class="btn btn-sm-2"
                                                                 onclick="deleteItem('item', {{ $item->id }})">Hapus</button>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -102,6 +118,23 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+                <!-- Modal Preview -->
+                <div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title">Preview Video</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body" id="previewContent">
+                                <!-- iframe akan masuk ke sini -->
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
                 <!-- MODAL IMPORT -->
@@ -119,10 +152,11 @@
                                     method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="file" class="form-label fw-semibold">Pilih File Excel (.xlsx /
-                                            .csv)</label>
-                                        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                                            type="file" name="file" id="file" class="form-control" required>
+                                        <label for="file" class="form-label fw-semibold">Pilih File Excel
+                                            (.xlsx)</label>
+                                        <input autocomplete="off" autocorrect="off" autocapitalize="off"
+                                            spellcheck="false" type="file" name="file" id="file"
+                                            class="form-control" required>
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center mt-4">
                                         <button type="submit" class="btn btn-add">
@@ -158,6 +192,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -488,5 +523,23 @@
                     .catch(() => notifError('Gagal menghapus data.'));
             });
         }
+
+        function previewVideo(encodedEmbed) {
+            let embed = atob(encodedEmbed);
+
+            // Bungkus iframe dalam responsive container
+            let wrapped = `
+        <div class="video-wrapper">
+            ${embed}
+        </div>
+    `;
+
+            document.getElementById('previewContent').innerHTML = wrapped;
+
+            let modal = new bootstrap.Modal(document.getElementById('previewModal'));
+            modal.show();
+        }
     </script>
+
+
 @endsection

@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShareExercise extends Model
 {
 	protected $table = 'share_exercises';
-	public $incrementing = false;
+	public $incrementing = true;
 	public $timestamps = false;
 
 	protected $casts = [

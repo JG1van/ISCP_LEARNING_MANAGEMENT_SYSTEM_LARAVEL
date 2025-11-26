@@ -9,7 +9,7 @@
 
     <li class="{{ request()->routeIs('admin.mapel.*') ? 'active' : '' }}">
         <a href="{{ route('admin.mapel.index') }}" class="d-block py-2 px-3 text-white">
-            <i class="bi bi-book me-2"></i> Kategori Pelajaran
+            <i class="bi bi-book me-2"></i> Mata Pelajaran
         </a>
     </li>
 
@@ -37,14 +37,14 @@
         </a>
     </li>
 
-    <li class="{{ request()->routeIs('admin.complaint.*') ? 'active' : '' }}">
-        <a href="{{ route('admin.complaint.index') }}" class="d-block py-2 px-3 text-white">
+    <li class="{{ request()->routeIs('admin.pengaduan.*') ? 'active' : '' }}">
+        <a href="{{ route('admin.pengaduan.index') }}" class="d-block py-2 px-3 text-white">
             <i class="bi bi-chat-left-text me-2"></i> Pengaduan
         </a>
     </li>
 
     <li
-        class="{{ request()->routeIs('admin.pengaturan.*') || request()->routeIs('admin.guru.*') || request()->routeIs('admin.siswa.*') || request()->routeIs('admin.admin.*') || request()->routeIs('admin.profil.*') || request()->routeIs('admin.pra_latihan.*') ? 'active' : '' }}">
+        class="{{ request()->routeIs('admin.pengaturan.*') || request()->routeIs('admin.guru.*') || request()->routeIs('admin.siswa.*') || request()->routeIs('admin.admin.*') || request()->routeIs('admin.profil.*') || request()->routeIs('admin.pra_latihan.*') || request()->routeIs('admin.kategori_pengaduan.*') ? 'active' : '' }}">
         <a href="{{ route('admin.pengaturan.index') }}" class="d-block py-2 px-3 text-white">
             <i class="bi bi-gear-fill me-2"></i> Pengaturan
         </a>

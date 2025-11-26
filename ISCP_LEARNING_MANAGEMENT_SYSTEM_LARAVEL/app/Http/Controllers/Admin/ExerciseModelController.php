@@ -57,11 +57,10 @@ class ExerciseModelController extends Controller
                 ], 422);
             }
 
-            $lastId = ExerciseModel::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
+
 
             $model = ExerciseModel::create([
-                'id' => $newId,
+
                 'name' => $request->name,
             ]);
 
@@ -163,6 +162,22 @@ class ExerciseModelController extends Controller
             ], 404);
         }
 
+        // Cek apakah model latihan masih digunakan
+        $relatedData = [];
+
+        if (\App\Models\ExerciseItem::where('exercise_model_id', $id)->exists()) {
+            $relatedData[] = 'soal';
+        }
+
+        // Jika masih digunakan, tolak penghapusan
+        if (!empty($relatedData)) {
+            $list = implode(', ', $relatedData);
+            return response()->json([
+                'success' => false,
+                'message' => "Model latihan tidak dapat dihapus karena masih terhubung dengan data: {$list}.",
+            ], 409);
+        }
+
         try {
             $model->delete();
 
@@ -184,4 +199,5 @@ class ExerciseModelController extends Controller
             ], 500);
         }
     }
+
 }

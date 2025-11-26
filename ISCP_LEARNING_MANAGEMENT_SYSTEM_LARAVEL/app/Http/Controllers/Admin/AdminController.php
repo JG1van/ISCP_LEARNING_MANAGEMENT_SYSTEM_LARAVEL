@@ -60,8 +60,7 @@ class AdminController extends Controller
 
         try {
             // Ambil ID terakhir untuk manual increment (optional, seperti di TeacherController)
-            $lastId = Admin::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
+
 
             // Upload foto jika ada
             $imgPath = null;
@@ -71,7 +70,7 @@ class AdminController extends Controller
             }
 
             $admin = Admin::create([
-                'id' => $newId,
+
                 'name' => $request->name,
                 'username' => $request->username,
                 'password' => Hash::make('Admin1234'),
@@ -203,19 +202,21 @@ class AdminController extends Controller
             ], 404);
         }
 
+        // Daftar model dan label relasi yang berpotensi terhubung dengan admin
+        $relations = [
+            ['model' => \App\Models\LessonItem::class, 'column' => 'admin_id', 'label' => 'materi'],
+            ['model' => \App\Models\ExerciseItem::class, 'column' => 'admin_id', 'label' => 'soal'],
+        ];
 
         $relatedData = [];
 
-        // Contoh: jika ada model Lesson yang punya kolom 'admin_id'
-        if (\App\Models\LessonItem::where('admin_id', $id)->exists()) {
-            $relatedData[] = 'materi';
-        }
-        if (\App\Models\ExerciseItem::where('admin_id', $id)->exists()) {
-            $relatedData[] = 'soal';
+        foreach ($relations as $relation) {
+            if ($relation['model']::where($relation['column'], $id)->exists()) {
+                $relatedData[] = $relation['label'];
+            }
         }
 
-
-        // Jika admin masih punya relasi aktif di salah satu tabel
+        // Jika admin masih punya data aktif
         if (!empty($relatedData)) {
             $list = implode(', ', $relatedData);
             return response()->json([
@@ -225,11 +226,11 @@ class AdminController extends Controller
         }
 
         try {
-            //   Hapus gambar admin jika ada
+            // Hapus gambar admin jika ada
             if ($admin->img) {
                 $imagePath = public_path('images/admins/' . $admin->img);
                 if (file_exists($imagePath)) {
-                    unlink($imagePath);
+                    @unlink($imagePath);
                 }
             }
 
@@ -240,7 +241,6 @@ class AdminController extends Controller
                 'message' => 'Admin berhasil dihapus.',
             ]);
         } catch (QueryException $e) {
-
             if ($e->getCode() === '23000') {
                 return response()->json([
                     'success' => false,

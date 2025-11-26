@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\Model;
 class Subtheme extends Model
 {
 	protected $table = 'subthemes';
-	public $incrementing = false;
+	public $incrementing = true;
 	public $timestamps = false;
 
 	protected $casts = [

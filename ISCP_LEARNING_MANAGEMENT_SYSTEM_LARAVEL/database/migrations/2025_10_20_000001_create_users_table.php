@@ -9,8 +9,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->integer('id', false, false)->nullable(false);
-            $table->primary('id');
+            $table->integer('id')->autoIncrement();
 
             $table->string('name', 100);
             $table->string('username', 100)->unique();

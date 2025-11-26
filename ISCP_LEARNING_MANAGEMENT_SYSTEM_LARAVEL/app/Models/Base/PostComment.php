@@ -37,7 +37,7 @@ use Illuminate\Database\Eloquent\Model;
 class PostComment extends Model
 {
 	protected $table = 'post_comments';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

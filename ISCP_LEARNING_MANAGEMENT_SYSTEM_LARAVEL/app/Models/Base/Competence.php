@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Model;
 class Competence extends Model
 {
 	protected $table = 'competences';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

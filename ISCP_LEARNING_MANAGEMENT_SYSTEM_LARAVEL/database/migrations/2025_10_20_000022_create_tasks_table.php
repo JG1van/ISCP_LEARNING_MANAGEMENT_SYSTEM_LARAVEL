@@ -12,8 +12,7 @@ return new class extends Migration {
     {
         Schema::create('tasks', function (Blueprint $table) {
             // id utama integer agar konsisten
-            $table->integer('id', false, false)->nullable(false);
-            $table->primary('id');
+            $table->integer('id')->autoIncrement();
 
             // foreign key harus sama tipe-nya dengan tabel referensinya
             $table->integer('serial_id', false, false);

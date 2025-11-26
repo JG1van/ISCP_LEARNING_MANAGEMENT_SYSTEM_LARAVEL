@@ -36,33 +36,38 @@
                         <td>{{ $admin->id }}</td>
                         <td class="admin-name">{{ $admin->name }}</td>
                         <td>{{ $admin->username }}</td>
-                        <td>
+                        <td class="text-center align-middle">
                             @switch($admin->role)
                                 @case(1)
-                                    <span class="badge bg-dark">Pemilik</span>
+                                    <span class="badge bg-dark d-flex justify-content-center align-items-center">Super-Admin</span>
                                 @break
 
                                 @case(2)
-                                    <span class="badge bg-primary">Admin Master</span>
+                                    <span class="badge bg-primary d-flex justify-content-center align-items-center">Admin</span>
                                 @break
 
                                 @case(3)
-                                    <span class="badge bg-success">Admin Operasional</span>
+                                    <span
+                                        class="badge bg-success d-flex justify-content-center align-items-center">Operasional</span>
                                 @break
 
                                 @case(4)
-                                    <span class="badge bg-warning text-dark">Admin Konten</span>
+                                    <span
+                                        class="badge bg-warning text-dark d-flex justify-content-center align-items-center">Konten-Pembelajaran</span>
                                 @break
 
                                 @case(5)
-                                    <span class="badge bg-info text-dark">Admin Layanan Pengguna</span>
+                                    <span
+                                        class="badge bg-info text-dark d-flex justify-content-center align-items-center">Layanan-Pengguna</span>
                                 @break
 
                                 @default
-                                    <span class="badge bg-secondary">Tidak Aktif</span>
+                                    <span class="badge bg-secondary d-flex justify-content-center align-items-center">Tidak
+                                        Aktif</span>
                             @endswitch
-
                         </td>
+
+
                         <td>
                             <div class="d-flex justify-content-center gap-1">
                                 @if (auth()->user()->id !== $admin->id)
@@ -118,11 +123,11 @@
                             <label class="form-label">Role</label>
                             <select name="role" class="form-select" required>
                                 <option value="0" selected>— Pilih Role —</option>
-                                <option value="1">Pemilik</option>
-                                <option value="2">Admin Master</option>
-                                <option value="3">Admin Operasional</option>
-                                <option value="4">Admin Konten</option>
-                                <option value="5">Admin Layanan Pengguna</option>
+                                <option value="1">Super-Admin</option>
+                                <option value="2">Admin</option>
+                                <option value="3">Operasional</option>
+                                <option value="4">Konten-Pembelajaran</option>
+                                <option value="5">Layanan-Pengguna</option>
                             </select>
                         </div>
 
@@ -190,7 +195,7 @@
                                     <div class="col-md-6">
                                         <label class="form-label fw-semibold">Tanggal Masuk</label>
                                         <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                                            type="text" id="editDateIn" name="date_in" class="form-control" readonly>
+                                            type="date" id="editDateIn" name="date_in" class="form-control" required>
                                     </div>
 
                                     <div class="col-md-6">
@@ -225,11 +230,11 @@
                                         <label class="form-label fw-semibold">Role / Status</label>
                                         <select id="editRole" name="role" class="form-select" required>
                                             <option value="0">Tidak Aktif</option>
-                                            <option value="1">Pemilik</option>
-                                            <option value="2">Admin Master</option>
-                                            <option value="3">Admin Operasional</option>
-                                            <option value="4">Admin Konten</option>
-                                            <option value="5">Admin Layanan Pengguna</option>
+                                            <option value="1">Super-Admin</option>
+                                            <option value="2">Admin</option>
+                                            <option value="3">Operasional</option>
+                                            <option value="4">Konten-Pembelajaran</option>
+                                            <option value="5">Layanan-Pengguna</option>
                                         </select>
                                     </div>
 

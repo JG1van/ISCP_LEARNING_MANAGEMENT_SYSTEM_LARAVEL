@@ -37,7 +37,7 @@ use Illuminate\Database\Eloquent\Model;
 class LessonItem extends Model
 {
 	protected $table = 'lesson_items';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

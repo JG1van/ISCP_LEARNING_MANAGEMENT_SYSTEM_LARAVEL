@@ -62,7 +62,7 @@
                         <th width="5%">No</th>
                         <th>Nama</th>
                         <th>Username</th>
-                        <th width="220">Aksi</th>
+                        <th width="170px">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="studentBody">
@@ -73,7 +73,7 @@
                             <td>{{ $student->username }}</td>
                             <td>
                                 <div class="d-flex justify-content-center gap-1">
-                                    <button class="btn btn-sm-1" onclick="editStudent('{{ $student->id }}')">Datail /
+                                    <button class="btn btn-sm-1" onclick="editStudent('{{ $student->id }}')">Detail /
                                         Edit</button>
                                     <button class="btn btn-sm-2"
                                         onclick="hapusStudent('{{ $student->id }}', '{{ $student->name }}')">Hapus</button>

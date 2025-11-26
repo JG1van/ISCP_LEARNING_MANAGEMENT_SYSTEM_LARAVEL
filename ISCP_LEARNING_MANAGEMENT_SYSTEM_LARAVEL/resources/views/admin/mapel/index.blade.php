@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen Kategori Pelajaran')
-@section('page_title', 'Manajemen Kategori Pelajaran')
+@section('title', 'Manajemen Mata Pelajaran')
+@section('page_title', 'Manajemen Mata Pelajaran')
 
 @section('content')
     {{--   Pencarian & Tombol Tambah --}}
@@ -9,23 +9,23 @@
         <div class="col-md-8">
             <label class="form-label">Pencarian</label>
             <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="searchInput" type="text"
-                class="form-control" placeholder="Cari Nama Kategori Pelajaran..." />
+                class="form-control" placeholder="Cari Nama Mata Pelajaran..." />
         </div>
         <div class="col-md-4 text-end">
             <button class="btn btn-add w-100" data-bs-toggle="modal" data-bs-target="#modalTambah">
-                <i class="fas fa-plus me-2"></i>Tambah Kategori Pelajaran
+                <i class="fas fa-plus me-2"></i>Tambah Mata Pelajaran
             </button>
         </div>
     </div>
 
-    {{--   Tabel Kategori Pelajaran --}}
+    {{--   Tabel Mata Pelajaran --}}
     <div class="table-responsive table-wrapper">
         <table class="table table-bordered w-100 table-hover text-center align-middle" id="mapelTable">
             <thead>
                 <tr>
                     <th style="width:60px;">No</th>
-                    <th>Nama Kategori</th>
-                    <th style="width:180px;">Aksi</th>
+                    <th>Nama Mata Pelajaran</th>
+                    <th style="width:140px;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="mapelBody">
@@ -43,7 +43,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="3" class="text-muted text-center">Belum ada data kategori pelajaran.</td>
+                        <td colspan="3" class="text-muted text-center">Belum ada data mata pelajaran.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -61,13 +61,13 @@
             <form id="formTambah" class="modal-content">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Kategori Pelajaran</h5>
+                    <h5 class="modal-title">Tambah Mata Pelajaran</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <label class="form-label">Nama Kategori</label>
-                    <input type="text" name="name" class="form-control" placeholder="Masukkan nama kategori pelajaran"
-                        required>
+                    <label class="form-label">Nama Mata Pelajaran</label>
+                    <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="text"
+                        name="name" class="form-control" placeholder="Masukkan nama mata pelajaran" required>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-add w-100">Simpan</button>
@@ -84,12 +84,13 @@
                 @method('PUT')
                 <input type="hidden" id="editId" name="id">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Kategori Pelajaran</h5>
+                    <h5 class="modal-title">Edit Mata Pelajaran</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <label class="form-label">Nama Kategori</label>
-                    <input type="text" id="editName" name="name" class="form-control" required>
+                    <label class="form-label">Nama Mata Pelajaran</label>
+                    <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="text"
+                        id="editName" name="name" class="form-control" required>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-add w-100">Simpan Perubahan</button>
@@ -133,7 +134,7 @@
                 });
             });
 
-            //   Tambah Kategori
+            //   Tambah Mata
             document.getElementById("formTambah").addEventListener("submit", function(e) {
                 e.preventDefault();
                 const data = Object.fromEntries(new FormData(this));
@@ -165,7 +166,7 @@
                     });
             });
 
-            //   Edit Kategori
+            //   Edit Mata
             document.getElementById("formEdit").addEventListener("submit", function(e) {
                 e.preventDefault();
                 const id = document.getElementById("editId").value;
@@ -215,7 +216,7 @@
         //  Hapus
         function hapusMapel(id, nama) {
             Swal.fire({
-                title: 'Hapus Kategori Pelajaran?',
+                title: 'Hapus Mata Pelajaran?',
                 text: `Yakin ingin menghapus "${nama}"?`,
                 icon: 'warning',
                 showCancelButton: true,

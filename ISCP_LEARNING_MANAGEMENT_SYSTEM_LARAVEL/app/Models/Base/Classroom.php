@@ -31,7 +31,7 @@ use App\Models\User;
 class Classroom extends Model
 {
 	protected $table = 'classrooms';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

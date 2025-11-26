@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
 class Help extends Model
 {
 	protected $table = 'helps';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

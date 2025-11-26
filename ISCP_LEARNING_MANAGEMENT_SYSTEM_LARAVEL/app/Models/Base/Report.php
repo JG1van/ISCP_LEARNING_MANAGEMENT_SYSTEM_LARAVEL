@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
 	protected $table = 'reports';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

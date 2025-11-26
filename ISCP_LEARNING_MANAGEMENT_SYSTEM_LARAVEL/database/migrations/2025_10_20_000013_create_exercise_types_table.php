@@ -8,8 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('exercise_types', function (Blueprint $table) {
-            $table->integer('id', false, false)->nullable(false);
-            $table->primary('id');
+            $table->integer('id')->autoIncrement();
             $table->string('kode', 10);
             $table->string('name', 50);
             $table->timestamps();

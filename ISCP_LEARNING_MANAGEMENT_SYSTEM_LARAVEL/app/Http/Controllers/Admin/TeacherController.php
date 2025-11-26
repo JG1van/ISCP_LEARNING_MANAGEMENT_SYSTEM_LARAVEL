@@ -60,9 +60,6 @@ class TeacherController extends Controller
         }
 
         try {
-            $lastId = User::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
-
             $imgPath = null;
             if ($request->hasFile('img')) {
                 $imgPath = $request->file('img')->store('public/guru');
@@ -70,7 +67,6 @@ class TeacherController extends Controller
             }
 
             $teacher = User::create([
-                'id' => $newId,
                 'name' => $request->name,
                 'username' => $request->username,
                 'password' => Hash::make('Guru1234'), //   default password
@@ -83,7 +79,7 @@ class TeacherController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Guru berhasil ditambahkan (password default: Guru1234).',
+                'message' => 'Guru berhasil ditambahkan.',
                 'data' => $teacher,
             ]);
         } catch (\Exception $e) {
@@ -187,18 +183,9 @@ class TeacherController extends Controller
         if (\App\Models\Serial::where('user_id', $id)->exists()) {
             $relatedData[] = 'serial';
         }
-        // if (\App\Models\post::where('user_id', $id)->exists()) {
-        //     $relatedData[] = 'post';
-        // }
-        // if (\App\Models\PostChildComment::where('user_id', $id)->exists()) {
-        //     $relatedData[] = 'post_child_comments';
-        // }
-        // if (\App\Models\PostComment::where('user_id', $id)->exists()) {
-        //     $relatedData[] = 'post_comments';
-        // }
-        // if (\App\Models\ExerciseItem::where('user_id', $id)->exists()) {
-        //     $relatedData[] = 'exercise_items';
-        // }
+        if (\App\Models\ExerciseItem::where('user_id', $id)->exists()) {
+            $relatedData[] = 'exercise_items';
+        }
 
         // Jika masih ada relasi aktif, tolak penghapusan
         if (!empty($relatedData)) {

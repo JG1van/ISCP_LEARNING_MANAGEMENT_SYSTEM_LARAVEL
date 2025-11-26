@@ -94,15 +94,11 @@ class StudentController extends Controller
         }
 
         try {
-            //   Manual increment ID
-            $lastId = Student::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
 
             //   Password default
             $defaultPassword = 'Siswa1234';
 
             $student = Student::create([
-                'id' => $newId,
                 'serial_id' => $request->serial_id,
                 'user_id' => $request->user_id,
                 'classroom_id' => $request->classroom_id,
@@ -117,7 +113,7 @@ class StudentController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Siswa berhasil ditambahkan (password default: ' . $defaultPassword . ').',
+                'message' => 'Siswa berhasil ditambahkan.',
                 'data' => $student
             ]);
         } catch (\Exception $e) {
@@ -210,25 +206,42 @@ class StudentController extends Controller
             ], 404);
         }
 
+        // Cek apakah siswa masih digunakan di tabel lain
+        $relatedData = [];
+
+        if (\App\Models\Report::where('student_id', $id)->exists()) {
+            $relatedData[] = 'laporan';
+        }
+
+        if (\App\Models\Task::where('student_id', $id)->exists()) {
+            $relatedData[] = 'tugas';
+        }
+
+        if (\App\Models\ExercisePoint::where('student_id', $id)->exists()) {
+            $relatedData[] = 'nilai soal';
+        }
+
+        if (!empty($relatedData)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Siswa tidak dapat dihapus karena masih terkait dengan: ' . implode(', ', $relatedData)
+            ], 409);
+        }
+
         try {
             $student->delete();
             return response()->json([
                 'success' => true,
                 'message' => 'Siswa berhasil dihapus.'
             ]);
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Siswa tidak dapat dihapus karena masih terhubung dengan data lain.'
-                ], 409);
-            }
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menghapus siswa: ' . $e->getMessage()
             ], 500);
         }
     }
+
 
     /**
      *    Reset Password Siswa

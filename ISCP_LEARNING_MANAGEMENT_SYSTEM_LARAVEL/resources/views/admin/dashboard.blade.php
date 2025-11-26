@@ -7,25 +7,21 @@
     <div class="container my-4">
 
         {{-- Kartu sambutan --}}
-        <div class="row mb-3 align-items-stretch g-2">
+        <div class="row mb-3 align-items-stretch g-4">
             <div class="col-md-8">
                 <div class="card p-4 d-flex flex-column flex-md-row justify-content-between align-items-center border shadow-sm text-center"
                     style="height: 300px">
-                    {{-- Gambar kiri --}}
                     <div class="d-none d-md-block px-2">
                         <img src="{{ asset('images/ilustrasi-selamat-datang-1.png') }}" alt="Ilustrasi Kiri"
                             style="height: 100px; max-width: 200px;">
                     </div>
-
-                    {{-- Teks tengah --}}
                     <div class="flex-grow-1 px-3">
-                        <h5 class="fw-bold mb-2">Halo, <span class="text-primary">{{ Auth::user()->name ?? 'Admin' }}</span>
+                        <h5 class="fw-bold mb-2">Halo, <span
+                                class="text-primary">{{ Auth::user()->username ?? 'Admin' }}</span>
                             👋</h5>
                         <p class="fs-6 text-muted mb-0">Selamat datang di</p>
                         <p class="fs-6 fw-semibold text-dark mb-0">Sistem Manajemen Pembelajaran (LMS)</p>
                     </div>
-
-                    {{-- Gambar kanan --}}
                     <div class="d-none d-md-block px-2">
                         <img src="{{ asset('images/ilustrasi-selamat-datang-2.png') }}" alt="Ilustrasi Kanan"
                             style="height: 100px; max-width: 200px;">
@@ -35,33 +31,33 @@
 
             {{-- Statistik kecil --}}
             <div class="col-md-4">
-                <div class="row g-2">
+                <div class="row g-4">
                     <div class="col-6">
                         <div class="card p-3 text-center border" style="min-height: 140px;">
                             <i class="bi bi-book text-primary" style="font-size: 2rem;"></i>
                             <h6 class="mt-2 text-truncate">Total Materi</h6>
-                            <h4 class="fw-bold text-dark fs-5">42</h4>
+                            <h4 class="fw-bold text-dark fs-5">{{ $totalMateri }}</h4>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="card p-3 text-center border" style="min-height: 140px;">
                             <i class="bi bi-people text-success" style="font-size: 2rem;"></i>
                             <h6 class="mt-2 text-truncate">Siswa Aktif</h6>
-                            <h4 class="fw-bold text-dark fs-5">128</h4>
+                            <h4 class="fw-bold text-dark fs-5">{{ $totalSiswa }}</h4>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="card p-3 text-center border" style="min-height: 140px;">
                             <i class="bi bi-person-workspace text-info" style="font-size: 2rem;"></i>
                             <h6 class="mt-2 text-truncate">Guru</h6>
-                            <h4 class="fw-bold text-dark fs-5">18</h4>
+                            <h4 class="fw-bold text-dark fs-5">{{ $totalGuru }}</h4>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="card p-3 text-center border" style="min-height: 140px;">
                             <i class="bi bi-journal-bookmark text-warning" style="font-size: 2rem;"></i>
                             <h6 class="mt-2 text-truncate">Kelas Aktif</h6>
-                            <h4 class="fw-bold text-dark fs-5">6</h4>
+                            <h4 class="fw-bold text-dark fs-5">{{ $totalKelas }}</h4>
                         </div>
                     </div>
                 </div>
@@ -75,7 +71,7 @@
                     <i class="bi bi-tv text-info" style="font-size: 2rem;"></i>
                     <div>
                         <div class="fw-semibold">Produk Pembelajaran</div>
-                        <div class="fw-bold text-dark fs-6">10 Modul</div>
+                        <div class="fw-bold text-dark fs-6">{{ $totalProduk }} Modul</div>
                     </div>
                 </div>
             </div>
@@ -83,8 +79,8 @@
                 <div class="card p-3 border d-flex flex-row align-items-center" style="gap: 15px;">
                     <i class="bi bi-collection text-primary" style="font-size: 2rem;"></i>
                     <div>
-                        <div class="fw-semibold">Tema & Subtema</div>
-                        <div class="fw-bold text-dark fs-6">15 Tema</div>
+                        <div class="fw-semibold">Mapel</div>
+                        <div class="fw-bold text-dark fs-6">{{ $totalMapel }} Mapel</div>
                     </div>
                 </div>
             </div>
@@ -93,18 +89,18 @@
                     <i class="bi bi-key text-success" style="font-size: 2rem;"></i>
                     <div>
                         <div class="fw-semibold">Serial Aktif</div>
-                        <div class="fw-bold text-dark fs-6">24 Kode</div>
+                        <div class="fw-bold text-dark fs-6">{{ $totalSerial }} Kode</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Grafik Placeholder --}}
+        {{-- Grafik Donat --}}
         <div class="row">
             <div class="col-md-6 mb-3">
                 <div class="card p-3 border">
-                    <h6 class="text-center"><i class="bi bi-pie-chart"></i> Distribusi Materi per Mapel</h6>
-                    <div style="height: 250px;">
+                    <h6 class="text-center"><i class="bi bi-pie-chart"></i> Distribusi Pelajaran per Mata Pelajaran</h6>
+                    <div style="height: 300px; display: flex; justify-content: center; align-items: center;">
                         <canvas id="materiChart"></canvas>
                     </div>
                 </div>
@@ -112,7 +108,7 @@
             <div class="col-md-6 mb-3">
                 <div class="card p-3 border">
                     <h6 class="text-center"><i class="bi bi-bar-chart"></i> Jumlah Siswa per Kelas</h6>
-                    <div style="height: 250px;">
+                    <div style="height: 300px; display: flex; justify-content: center; align-items: center;">
                         <canvas id="kelasChart"></canvas>
                     </div>
                 </div>
@@ -122,51 +118,109 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const materiChart = new Chart(document.getElementById('materiChart'), {
-            type: 'doughnut',
+        // Data dari controller
+        const materiLabels = {!! json_encode($materiPerMapel->pluck('mapel')) !!};
+        const materiData = {!! json_encode($materiPerMapel->pluck('total')) !!};
+        const kelasLabels = {!! json_encode($siswaPerKelas->pluck('kelas')) !!};
+        const kelasData = {!! json_encode($siswaPerKelas->pluck('total')) !!};
+
+        // Fungsi warna acak dengan saturasi tinggi
+        function generateColors(count) {
+            const colors = [];
+            for (let i = 0; i < count; i++) {
+                const hue = Math.floor(360 * Math.random());
+                const saturation = 70 + Math.random() * 30; // 70%–100%
+                const lightness = 45 + Math.random() * 15; // 45%–60%
+                colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
+            }
+            return colors;
+        }
+
+        const materiColors = generateColors(materiData.length);
+        const kelasColors = generateColors(kelasData.length);
+
+        // Chart: Distribusi Materi per Mapel
+        new Chart(document.getElementById("materiChart").getContext("2d"), {
+            type: "doughnut",
             data: {
-                labels: ['Matematika', 'IPA', 'IPS', 'Bahasa Indonesia', 'PJOK'],
+                labels: materiLabels,
                 datasets: [{
-                    data: [12, 9, 7, 14, 5],
-                    backgroundColor: ['#2ecc71', '#3498db', '#f1c40f', '#e67e22', '#e74c3c'],
-                    borderWidth: 2
+                    data: materiData,
+                    backgroundColor: materiColors,
+                    borderColor: "#ffffff",
+                    borderWidth: 4
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: 10
+                },
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: "bottom",
+                        labels: {
+                            color: "#333",
+                            font: {
+                                size: 13,
+                                weight: "bold"
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.parsed}`;
+                            }
+                        }
                     }
                 }
             }
         });
 
-        const kelasChart = new Chart(document.getElementById('kelasChart'), {
-            type: 'bar',
+        // Chart: Jumlah Siswa per Kelas
+        new Chart(document.getElementById("kelasChart").getContext("2d"), {
+            type: "doughnut",
             data: {
-                labels: ['Kelas 1', 'Kelas 2', 'Kelas 3', 'Kelas 4', 'Kelas 5', 'Kelas 6'],
+                labels: kelasLabels,
                 datasets: [{
-                    label: 'Jumlah Siswa',
-                    data: [30, 28, 26, 32, 29, 31],
-                    backgroundColor: '#8e44ad',
-                    borderRadius: 6
+                    data: kelasData,
+                    backgroundColor: kelasColors,
+                    borderColor: "#ffffff",
+                    borderWidth: 4
                 }]
             },
             options: {
                 responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                maintainAspectRatio: false,
+                layout: {
+                    padding: 10
                 },
                 plugins: {
                     legend: {
-                        display: false
+                        position: "bottom",
+                        labels: {
+                            color: "#333",
+                            font: {
+                                size: 13,
+                                weight: "bold"
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.parsed}`;
+                            }
+                        }
                     }
                 }
             }
         });
     </script>
+
+
 @endsection

@@ -15,7 +15,6 @@ class Admin extends BaseAdmin implements AuthenticatableContract
 	];
 
 	protected $fillable = [
-		'id',
 		'name',
 		'username',
 		'password',

@@ -61,23 +61,23 @@
                                         <td>
                                             @switch($admin->role)
                                                 @case(1)
-                                                    Pemilik
+                                                    Super-Admin
                                                 @break
 
                                                 @case(2)
-                                                    Admin Master
+                                                    Admin
                                                 @break
 
                                                 @case(3)
-                                                    Admin Operasional
+                                                    Operasional
                                                 @break
 
                                                 @case(4)
-                                                    Admin Konten
+                                                    Konten-Pembelajaran
                                                 @break
 
                                                 @case(5)
-                                                    Admin Layanan Pengguna
+                                                    Layanan-Pengguna
                                                 @break
 
                                                 @default

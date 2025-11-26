@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Model;
 class ExercisePoint extends Model
 {
 	protected $table = 'exercise_points';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

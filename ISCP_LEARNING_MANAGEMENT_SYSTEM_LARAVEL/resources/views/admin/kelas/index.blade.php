@@ -86,6 +86,11 @@
                     </tr>
                 @endforelse
             </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="6"></th>
+                </tr>
+            </tfoot>
         </table>
     </div>
 
@@ -357,19 +362,38 @@
                 reverseButtons: true
             }).then(async result => {
                 if (result.isConfirmed) {
-                    const res = await fetch(`/admin/kelas/${id}`, {
-                        method: "DELETE",
-                        headers: {
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    try {
+                        const res = await fetch(`/admin/kelas/${id}`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            }
+                        });
+
+                        let out;
+                        try {
+                            out = await res.json(); // parsing JSON
+                        } catch (err) {
+                            // Jika bukan JSON, buat object default
+                            out = {
+                                success: false,
+                                message: `Terjadi kesalahan: ${res.status} ${res.statusText}`
+                            };
                         }
-                    });
-                    const out = await res.json();
-                    if (out.success) {
-                        notifSuccess(out.message);
-                        document.getElementById(`row${id}`).remove();
-                    } else notifError(out.message);
+
+                        if (out.success) {
+                            notifSuccess(out.message);
+                            document.getElementById(`row${id}`).remove();
+                        } else {
+                            notifError(out.message);
+                        }
+
+                    } catch (err) {
+                        notifError('Gagal menghapus kelas: ' + err.message);
+                    }
                 }
             });
+
         }
     </script>
 @endsection

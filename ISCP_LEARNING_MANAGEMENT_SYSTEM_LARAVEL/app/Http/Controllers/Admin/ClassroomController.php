@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 use App\Models\Classroom;
 use App\Models\Serial;
 use App\Models\User;
+use App\Models\Student;
+use App\Models\Report;
+use App\Models\Task;
 use Carbon\Carbon;
 
 class ClassroomController extends Controller
@@ -109,16 +112,12 @@ class ClassroomController extends Controller
                 ], 422);
             }
 
-            //   Tambahkan pembuatan ID manual seperti LessonController
-            $lastId = Classroom::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
 
             //   Generate kode unik
             $code = $this->generateCode();
 
             //   Simpan kelas baru
             $classroom = Classroom::create([
-                'id' => $newId, // ← Tambahan penting
                 'serial_id' => $serial->id,
                 'name' => $request->name,
                 'grade' => $request->grade,
@@ -244,21 +243,38 @@ class ClassroomController extends Controller
     public function destroy($id)
     {
         $classroom = Classroom::find($id);
-
         if (!$classroom) {
             return response()->json(['success' => false, 'message' => 'Kelas tidak ditemukan.'], 404);
+        }
+
+        $relatedData = [];
+        if (\App\Models\Student::where('classroom_id', $id)->exists())
+            $relatedData[] = 'siswa';
+        // if (\App\Models\Report::where('classroom_id', $id)->exists())
+        //     $relatedData[] = 'laporan';
+        // if (\App\Models\Task::where('classroom_id', $id)->exists())
+        //     $relatedData[] = 'tugas';
+
+        if (!empty($relatedData)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kelas tidak dapat dihapus karena masih terkait dengan: ' . implode(', ', $relatedData),
+            ], 409);
         }
 
         try {
             $classroom->delete();
             return response()->json(['success' => true, 'message' => 'Kelas berhasil dihapus.']);
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
-                return response()->json(['success' => false, 'message' => 'Kelas masih terhubung dengan data lain.'], 409);
-            }
-            return response()->json(['success' => false, 'message' => 'Gagal menghapus kelas: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            // Kembalikan pesan error spesifik agar JS bisa memunculkan notif
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus kelas: ' . $e->getMessage()
+            ], 500);
         }
     }
+
+
 
     /**
      * Generate kode unik

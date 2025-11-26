@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -12,54 +13,61 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //
+        // Statistik utama
+        $totalGuru = DB::table('users')->count();
+        $totalSiswa = DB::table('students')->count();
+        $totalMapel = DB::table('mapels')->count();
+        $totalProduk = DB::table('products')->count();
+        $totalKelas = DB::table('classrooms')->count();
+        $totalSerial = DB::table('serials')->count();
+        $totalMateri = DB::table('lessons')->count();
+
+        // Distribusi Materi per Mapel (untuk chart donat)
+        $materiPerMapel = DB::table('lessons')
+            ->join('mapels', 'lessons.mapel_id', '=', 'mapels.id')
+            ->select('mapels.name as mapel', DB::raw('COUNT(lessons.id) as total'))
+            ->groupBy('mapels.name')
+            ->orderByDesc('total')
+            ->get();
+
+        // Jumlah Siswa per Kelas (untuk chart donat)
+        $siswaPerKelas = DB::table('students')
+            ->join('classrooms', 'students.classroom_id', '=', 'classrooms.id')
+            ->select('classrooms.name as kelas', DB::raw('COUNT(students.id) as total'))
+            ->groupBy('classrooms.name')
+            ->orderByDesc('total')
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'totalGuru',
+            'totalSiswa',
+            'totalMapel',
+            'totalProduk',
+            'totalKelas',
+            'totalSerial',
+            'totalMateri',
+            'materiPerMapel',
+            'siswaPerKelas'
+        ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // keep rest of resource methods if needed
     public function create()
-    {
-        //
+    { /* ... */
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
-    {
-        //
+    { /* ... */
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
-    {
-        //
+    { /* ... */
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
-    {
-        //
+    { /* ... */
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
-    {
-        //
+    { /* ... */
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
-    {
-        //
+    { /* ... */
     }
 }

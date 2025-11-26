@@ -2,67 +2,54 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Defaults
-    |--------------------------------------------------------------------------
-    |
-    | Ini menentukan guard dan konfigurasi password reset default aplikasi.
-    | Karena sistemmu hanya memiliki login admin, maka default diarahkan
-    | ke guard 'web' dan provider 'admins'.
-    |
-    */
-
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'admins',
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Guards
-    |--------------------------------------------------------------------------
-    |
-    | Setiap guard mewakili cara login yang berbeda (misalnya admin, user).
-    | Guard 'web' di bawah menggunakan driver 'session' dan provider 'admins'.
-    |
-    */
-
+    // ==============================
+    // GUARDS
+    // ==============================
     'guards' => [
+
+        // DEFAULT — untuk ADMIN
         'web' => [
             'driver' => 'session',
             'provider' => 'admins',
         ],
+
+        // Guru & Siswa pakai login() manual tanpa guard
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | User Providers
-    |--------------------------------------------------------------------------
-    |
-    | Provider menentukan bagaimana data pengguna diambil dari database.
-    | Di sini kita gunakan model App\Models\Admin untuk tabel 'admins'.
-    |
-    */
-
+    // ==============================
+    // PROVIDERS (3 MODEL)
+    // ==============================
     'providers' => [
+
+        // ADMIN TABLE
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
+
+        // GURU (Users)
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+
+        // STUDENT
+        'students' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Student::class,
+        ],
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Resetting Passwords
-    |--------------------------------------------------------------------------
-    |
-    | Konfigurasi reset password untuk admin.
-    | 'table' menyimpan token reset, 'expire' waktu token berlaku (menit).
-    |
-    */
-
+    // ==============================
+    // PASSWORD RESET
+    // ==============================
     'passwords' => [
+
         'admins' => [
             'provider' => 'admins',
             'table' => 'password_reset_tokens',
@@ -71,16 +58,5 @@ return [
         ],
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Password Confirmation Timeout
-    |--------------------------------------------------------------------------
-    |
-    | Waktu (dalam detik) sebelum password confirmation kadaluarsa.
-    | Default: 3 jam (10800 detik).
-    |
-    */
-
     'password_timeout' => 10800,
-
 ];

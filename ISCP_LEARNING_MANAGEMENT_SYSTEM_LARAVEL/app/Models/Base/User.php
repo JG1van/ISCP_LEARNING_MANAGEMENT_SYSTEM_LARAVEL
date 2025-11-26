@@ -33,9 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $login_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
- * @property Collection|ComplaintHistoryUser[] $complaint_history_users
- * @property Collection|ComplaintMessagesUser[] $complaint_messages_users
+
  * @property Collection|ExerciseItem[] $exercise_items
  * @property Collection|PostChildComment[] $post_child_comments
  * @property Collection|PostComment[] $post_comments
@@ -48,7 +46,7 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
 	protected $table = 'users';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',
@@ -57,15 +55,9 @@ class User extends Model
 
 	];
 
-	public function complaint_history_users()
-	{
-		return $this->hasMany(ComplaintHistoryUser::class, 'reporter_user_id');
-	}
 
-	public function complaint_messages_users()
-	{
-		return $this->hasMany(ComplaintMessagesUser::class, 'reporter_user_id');
-	}
+
+
 
 	public function exercise_items()
 	{

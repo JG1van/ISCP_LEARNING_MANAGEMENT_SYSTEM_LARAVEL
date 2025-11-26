@@ -60,7 +60,7 @@
                     <i class="fas fa-brain fa-2x mb-2 "></i>
                     <h5 class="card-title">Tipe Latihan</h5>
                     <p class="card-text">Kelola jenis latihan.</p>
-                    <a href="{{ route('admin.pra_latihan.tipe.index') }}" class="btn btn-add w-100">Masuk</a>
+                    <a href="{{ route('admin.pra_latihan.tipe.index') }}" class="btn btn-add w-100">Pilih</a>
                 </div>
             </div>
         </div>
@@ -72,7 +72,18 @@
                     <i class="fas fa-shapes fa-2x mb-2"></i>
                     <h5 class="card-title">Model Latihan</h5>
                     <p class="card-text">Kelola model latihan pembelajaran.</p>
-                    <a href="{{ route('admin.pra_latihan.model.index') }}" class="btn btn-add w-100">Masuk</a>
+                    <a href="{{ route('admin.pra_latihan.model.index') }}" class="btn btn-add w-100">Pilih</a>
+                </div>
+            </div>
+        </div>
+        {{-- Kategori Pengaduan --}}
+        <div class="col-md-4">
+            <div class="card text-center h-200">
+                <div class="card-body">
+                    <i class="fas fa-list-alt fa-2x mb-2"></i>
+                    <h5 class="card-title">Kategori Pengaduan</h5>
+                    <p class="card-text">Kelola daftar kategori pengaduan</p>
+                    <a href="{{ route('admin.kategori_pengaduan.index') }}" class="btn btn-add w-100">Pilih</a>
                 </div>
             </div>
         </div>

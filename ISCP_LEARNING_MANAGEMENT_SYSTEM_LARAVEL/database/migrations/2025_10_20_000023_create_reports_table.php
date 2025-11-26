@@ -9,8 +9,7 @@ return new class extends Migration {
     {
         Schema::create('reports', function (Blueprint $table) {
             // ID manual, tanpa auto increment
-            $table->integer('id', false, false)->nullable(false);
-            $table->primary('id');
+            $table->integer('id')->autoIncrement();
 
             $table->integer('serial_id')->nullable(false);
             $table->integer('student_id')->nullable(false);

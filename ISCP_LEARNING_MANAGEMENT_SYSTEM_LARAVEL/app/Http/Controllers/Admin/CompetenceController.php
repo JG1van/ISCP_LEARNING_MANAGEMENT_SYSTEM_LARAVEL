@@ -54,9 +54,7 @@ class CompetenceController extends Controller
                 ], 404);
             }
 
-            // ID manual (karena tabel tidak auto increment)
-            $lastId = Competence::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
+
 
             // Ambil KD terakhir berdasarkan pelajaran
             $lastKD = Competence::where('lesson_id', $lesson_id)
@@ -71,7 +69,7 @@ class CompetenceController extends Controller
             $point = 'KD-' . str_pad($nextNumber, 2, '0', STR_PAD_LEFT);
 
             $competence = Competence::create([
-                'id' => $newId,
+
                 'lesson_id' => $lesson_id,
                 'mapel_id' => $lesson->mapel_id,
                 'point' => $point,
@@ -181,6 +179,22 @@ class CompetenceController extends Controller
             ], 404);
         }
 
+        // Cek apakah kompetensi masih digunakan di tabel lain
+        $relatedData = [];
+
+        if (\App\Models\ExerciseItem::where('competence_id', $id)->exists()) {
+            $relatedData[] = 'soal';
+        }
+
+        // Jika masih dipakai di tabel lain
+        if (!empty($relatedData)) {
+            $list = implode(', ', $relatedData);
+            return response()->json([
+                'success' => false,
+                'message' => "Kompetensi ini tidak dapat dihapus karena masih terhubung dengan data: {$list}.",
+            ], 409);
+        }
+
         try {
             $competence->delete();
 
@@ -189,15 +203,23 @@ class CompetenceController extends Controller
                 'message' => 'Kompetensi berhasil dihapus.',
             ]);
         } catch (QueryException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Kompetensi tidak dapat dihapus karena masih terhubung dengan data lain.',
-            ], 409);
-        } catch (\Exception $e) {
+            if ($e->getCode() === '23000') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kompetensi tidak dapat dihapus karena masih terhubung dengan data lain.',
+                ], 409);
+            }
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menghapus kompetensi: ' . $e->getMessage(),
             ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
         }
     }
+
 }

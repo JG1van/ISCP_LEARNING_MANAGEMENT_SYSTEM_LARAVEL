@@ -47,7 +47,7 @@ class Admin extends Authenticatable
 	use Notifiable;
 
 	protected $table = 'admins';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

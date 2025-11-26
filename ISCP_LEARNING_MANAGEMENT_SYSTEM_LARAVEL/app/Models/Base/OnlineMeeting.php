@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\Model;
 class OnlineMeeting extends Model
 {
 	protected $table = 'online_meetings';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

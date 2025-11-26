@@ -111,12 +111,6 @@ class ExerciseItemController extends Controller
             DB::transaction(function () use ($request, $lesson_id, $exercise_id) {
                 $exercise = Exercise::findOrFail($exercise_id);
 
-                /**
-                 * 🔹 Generate ID manual — aman terhadap race condition
-                 * Gunakan `lockForUpdate()` agar dua transaksi tidak ambil ID yang sama.
-                 */
-                $lastItem = ExerciseItem::lockForUpdate()->orderByDesc('id')->first();
-                $newId = $lastItem ? $lastItem->id + 1 : 1;
 
                 // Nomor urut soal terakhir
                 $lastNumber = ExerciseItem::where('exercise_id', $exercise_id)
@@ -147,7 +141,7 @@ class ExerciseItemController extends Controller
 
                 // Simpan ke database
                 ExerciseItem::create([
-                    'id' => $newId,
+
                     'admin_id' => auth()->id() ?? 5, // fallback ID admin default
                     'user_id' => null,
                     'lesson_id' => $lesson_id,

@@ -37,8 +37,6 @@ class ThemeController extends Controller
                 'name.max' => 'Nama tema maksimal 200 karakter.',
             ]);
 
-            // Auto increment manual untuk ID
-            $newId = (Theme::orderByDesc('id')->value('id') ?? 0) + 1;
 
             // Cari nomor tema terakhir untuk pelajaran ini
             $lastTheme = Theme::where('lesson_id', $lesson_id)
@@ -49,7 +47,6 @@ class ThemeController extends Controller
 
             // Simpan tema baru
             $theme = Theme::create([
-                'id' => $newId,
                 'lesson_id' => $lesson_id,
                 'theme' => $nextThemeNumber,
                 'name' => $request->name,
@@ -136,8 +133,6 @@ class ThemeController extends Controller
                 'name.max' => 'Nama subtema maksimal 200 karakter.',
             ]);
 
-            // Auto increment manual untuk ID
-            $newId = (Subtheme::orderByDesc('id')->value('id') ?? 0) + 1;
 
             // Cari nomor subtema terakhir untuk theme ini
             $lastSub = Subtheme::where('theme_id', $request->theme_id)
@@ -148,7 +143,7 @@ class ThemeController extends Controller
 
             // Simpan subtema baru
             $sub = Subtheme::create([
-                'id' => $newId,
+
                 'lesson_id' => $lesson_id,
                 'theme_id' => $request->theme_id,
                 'subtheme' => $nextSubNumber,
@@ -256,8 +251,6 @@ class ThemeController extends Controller
                 ? preg_replace('/\s*(width|height)="[^"]*"/i', '', $request->embed)
                 : null;
 
-            // Auto increment manual untuk ID
-            $newId = (LessonItem::orderByDesc('id')->value('id') ?? 0) + 1;
 
             // Nomor urut item berdasarkan subtema
             $lastItem = LessonItem::where('subtheme_id', $request->subtheme_id)
@@ -268,7 +261,7 @@ class ThemeController extends Controller
 
             // Simpan item
             $item = LessonItem::create([
-                'id' => $newId,
+
                 'lesson_id' => $lesson_id,
                 'theme_id' => $request->theme_id,
                 'subtheme_id' => $request->subtheme_id,

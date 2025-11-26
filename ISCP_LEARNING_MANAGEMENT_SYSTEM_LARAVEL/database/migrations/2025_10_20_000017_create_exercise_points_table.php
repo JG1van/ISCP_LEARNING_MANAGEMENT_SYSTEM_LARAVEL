@@ -12,8 +12,7 @@ return new class extends Migration {
     {
         Schema::create('exercise_points', function (Blueprint $table) {
             // id disamakan dengan tabel lain (integer, bukan bigint)
-            $table->integer('id', false, false)->nullable(false);
-            $table->primary('id');
+            $table->integer('id')->autoIncrement();
 
             // foreign key pakai integer juga
             $table->integer('serial_id')->nullable(false);

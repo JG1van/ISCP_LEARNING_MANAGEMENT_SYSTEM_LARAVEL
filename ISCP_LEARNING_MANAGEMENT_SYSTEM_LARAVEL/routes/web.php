@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LoginAllController;
 
 //   ADMIN CONTROLLERS
 use App\Http\Controllers\Admin\AdminController;
@@ -19,20 +20,29 @@ use App\Http\Controllers\Admin\SerialController;
 use App\Http\Controllers\Admin\ClassroomController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\StudentController;
-use App\Http\Controllers\Admin\ComplaintController;
+use App\Http\Controllers\Admin\ComplaintAdminController;
+use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\Admin\ComplaintCategoryController;
 use App\Http\Controllers\Admin\ImportMateriController;
+use App\Http\Controllers\Admin\DashboardController;
+use Kreait\Firebase\Factory;
+
+
 
 //  ROUTE AWAL
 Route::get('/', fn() => redirect('/login'));
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.process');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
+Route::get('/login', [App\Http\Controllers\Auth\LoginAllController::class, 'showLogin'])->name('login');
+Route::post('/login', [App\Http\Controllers\Auth\LoginAllController::class, 'login'])->name('login.process');
+Route::post('/logout', [App\Http\Controllers\Auth\LoginAllController::class, 'logout'])->name('logout');
+
 
 //  ROUTE DENGAN AUTHENTICATION + PREFIX ADMIN
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
 
     //  DASHBOARD
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     //  PRODUK
     Route::prefix('produk')->name('produk.')->group(function () {
@@ -147,7 +157,48 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::post('update', [AdminProfilController::class, 'update'])->name('update');
         Route::post('destroy', [AdminProfilController::class, 'destroy'])->name('destroy');
     });
+    Route::resource('kategori_pengaduan', ComplaintCategoryController::class);
 
-    //  COMPLAINT
-    Route::resource('complaint', ComplaintController::class);
+
+});
+
+
+// --- ROUTE PUBLIC --- //
+Route::get('/pengaduan', [ComplaintController::class, 'showCreateForm'])
+    ->name('pengaduan.index');
+Route::get('/pengaduan/create', [ComplaintController::class, 'createRoom'])
+    ->name('pengaduan.create');
+Route::post('/pengaduan/continue', [ComplaintController::class, 'continueComplaint'])
+    ->name('pengaduan.continue');
+Route::post('/pengaduan/assign-category/{code}', [ComplaintController::class, 'assignCategory'])
+    ->name('pengaduan.assign_category');
+Route::post('/pengaduan/set-admin/{id}', [ComplaintController::class, 'setAdminStatus'])
+    ->name('pengaduan.set_admin');
+Route::post('/pengaduan/finish/{code}', [ComplaintController::class, 'userFinish'])
+    ->name('pengaduan.finish');
+Route::get('/pengaduan/ruang/{code}', [ComplaintController::class, 'userChat'])
+    ->name('pengaduan.ruang_pesan');
+Route::post('/login-all', [LoginAllController::class, 'loginAjax'])
+    ->name('login.ajax');
+
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+
+    Route::get('/pengaduan', [ComplaintAdminController::class, 'adminIndex'])
+        ->name('admin.pengaduan.index');
+
+    Route::get('/pengaduan/ruang/{code}', [ComplaintAdminController::class, 'adminChat'])
+        ->name('admin.pengaduan.ruang_pesan');
+
+    Route::delete('/pengaduan/{code}/hapus', [ComplaintAdminController::class, 'adminDelete'])
+        ->name('admin.pengaduan.delete');
+
+    Route::post('/pengaduan/finish/{code}', [ComplaintAdminController::class, 'adminFinish'])
+        ->name('admin.pengaduan.finish');
+
+    Route::get('/pengaduan/riwayat', [ComplaintAdminController::class, 'logsIndex'])
+        ->name('admin.pengaduan.riwayat');
+
+    Route::delete('/pengaduan/riwayat/{id}/hapus', [ComplaintAdminController::class, 'deleteLog'])
+        ->name('admin.pengaduan.riwayat.delete');
 });

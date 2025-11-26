@@ -7,7 +7,7 @@ use App\Models\Base\ExerciseItem as BaseExerciseItem;
 class ExerciseItem extends BaseExerciseItem
 {
 	protected $fillable = [
-		'id',
+
 		'admin_id',
 		'user_id',
 		'competence_id',

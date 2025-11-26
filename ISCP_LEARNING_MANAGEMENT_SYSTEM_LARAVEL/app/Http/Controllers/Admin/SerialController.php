@@ -83,11 +83,7 @@ class SerialController extends Controller
                 }
             }
 
-            $lastId = Serial::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
-
             $serial = Serial::create([
-                'id' => $newId,
                 'user_id' => $request->user_id,
                 'product_id' => $request->product_id,
                 'serial' => $this->generateSerial(),
@@ -215,6 +211,42 @@ class SerialController extends Controller
             ], 404);
         }
 
+        // Cek apakah serial masih digunakan di tabel lain
+        $relatedData = [];
+
+        // Cek classrooms
+        if (\App\Models\Classroom::where('serial_id', $id)->exists()) {
+            $relatedData[] = 'kelas';
+        }
+
+        // Cek students
+        if (\App\Models\Student::where('serial_id', $id)->exists()) {
+            $relatedData[] = 'siswa';
+        }
+
+        // Cek reports
+        if (\App\Models\Report::where('serial_id', $id)->exists()) {
+            $relatedData[] = 'laporan';
+        }
+
+        // Cek tasks
+        if (\App\Models\Task::where('serial_id', $id)->exists()) {
+            $relatedData[] = 'tugas';
+        }
+
+        // Cek exercises
+        if (\App\Models\Exercise::where('serial_id', $id)->exists()) {
+            $relatedData[] = 'soal';
+        }
+
+        // Jika ada relasi yang masih digunakan
+        if (!empty($relatedData)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Serial tidak dapat dihapus karena masih digunakan pada: ' . implode(', ', $relatedData),
+            ], 409);
+        }
+
         try {
             $serial->delete();
 
@@ -222,20 +254,14 @@ class SerialController extends Controller
                 'success' => true,
                 'message' => 'Serial berhasil dihapus.',
             ]);
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Serial tidak dapat dihapus karena masih terhubung dengan data lain.',
-                ], 409);
-            }
-
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menghapus serial: ' . $e->getMessage(),
             ], 500);
         }
     }
+
 
     /**
      * Generate serial unik

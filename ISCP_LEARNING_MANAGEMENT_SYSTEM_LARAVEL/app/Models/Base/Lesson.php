@@ -40,7 +40,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lesson extends Model
 {
 	protected $table = 'lessons';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

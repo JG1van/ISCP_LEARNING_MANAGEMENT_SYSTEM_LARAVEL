@@ -40,8 +40,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property Classroom $classroom
  * @property Serial $serial
  * @property User $user
- * @property Collection|ComplaintHistoryStudent[] $complaint_history_students
- * @property Collection|ComplaintMessagesStudent[] $complaint_messages_students
  * @property Collection|ExercisePoint[] $exercise_points
  * @property Collection|PostChildComment[] $post_child_comments
  * @property Collection|PostComment[] $post_comments
@@ -53,7 +51,7 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
 	protected $table = 'students';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',
@@ -77,15 +75,6 @@ class Student extends Model
 		return $this->belongsTo(User::class);
 	}
 
-	public function complaint_history_students()
-	{
-		return $this->hasMany(ComplaintHistoryStudent::class, 'reporter_student_id');
-	}
-
-	public function complaint_messages_students()
-	{
-		return $this->hasMany(ComplaintMessagesStudent::class, 'reporter_student_id');
-	}
 
 	public function exercise_points()
 	{

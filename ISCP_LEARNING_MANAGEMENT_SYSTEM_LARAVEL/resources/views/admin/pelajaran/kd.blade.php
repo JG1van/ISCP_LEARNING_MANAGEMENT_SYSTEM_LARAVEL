@@ -47,7 +47,7 @@
                         <th width="5%">No</th>
                         <th width="15%">Kode</th>
                         <th>Deskripsi</th>
-                        <th width="15%">Aksi</th>
+                        <th width="150px">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="kdBody">

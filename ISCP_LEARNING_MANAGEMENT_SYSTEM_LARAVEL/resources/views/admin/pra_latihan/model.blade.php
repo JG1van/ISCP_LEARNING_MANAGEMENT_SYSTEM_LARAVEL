@@ -25,7 +25,7 @@
                 <tr>
                     <th>No</th>
                     <th>Nama Model Latihan</th>
-                    <th style="width:180px;">Aksi</th>
+                    <th style="width:140px;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="modelBody">

@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Model;
 class PostChildComment extends Model
 {
 	protected $table = 'post_child_comments';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

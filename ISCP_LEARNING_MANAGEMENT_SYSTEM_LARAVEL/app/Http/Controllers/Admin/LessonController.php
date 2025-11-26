@@ -69,12 +69,10 @@ class LessonController extends Controller
                 ], 422);
             }
 
-            // buat id manual karena tabel tidak auto_increment
-            $lastId = Lesson::max('id');
-            $newId = $lastId ? $lastId + 1 : 1;
+
 
             $lesson = Lesson::create([
-                'id' => $newId,
+
                 'mapel_id' => $request->mapel_id,
                 'name' => $request->name,
                 'grade' => $request->grade,
@@ -194,15 +192,37 @@ class LessonController extends Controller
             ], 404);
         }
 
-        // // Cek relasi ke Theme
-        // $themes = Theme::where('lesson_id', $id)->pluck('name');
-        // if ($themes->count() > 0) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Pelajaran tidak dapat dihapus karena masih terhubung dengan tema: ' . $themes->implode(', '),
-        //     ], 409);
-        // }
+        // Cek relasi terkait
+        $relatedData = [];
 
+        if (\App\Models\Theme::where('lesson_id', $id)->exists()) {
+            $relatedData[] = 'tema';
+        }
+
+        if (\App\Models\Subtheme::where('lesson_id', $id)->exists()) {
+            $relatedData[] = 'subtema';
+        }
+
+        if (\App\Models\LessonItem::where('lesson_id', $id)->exists()) {
+            $relatedData[] = 'materi ajar';
+        }
+
+        if (\App\Models\Exercise::where('lesson_id', $id)->exists()) {
+            $relatedData[] = 'latihan/soal';
+        }
+
+        if (\App\Models\Competence::where('lesson_id', $id)->exists()) {
+            $relatedData[] = 'kompetensi';
+        }
+
+        // Jika ada relasi aktif, tolak penghapusan
+        if (!empty($relatedData)) {
+            $list = implode(', ', $relatedData);
+            return response()->json([
+                'success' => false,
+                'message' => "Pelajaran tidak dapat dihapus karena masih terhubung dengan data: {$list}.",
+            ], 409);
+        }
 
         try {
             $lesson->delete();
@@ -225,4 +245,5 @@ class LessonController extends Controller
             ], 500);
         }
     }
+
 }

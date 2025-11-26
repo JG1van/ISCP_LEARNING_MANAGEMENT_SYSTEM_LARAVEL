@@ -105,13 +105,11 @@ class ProductController extends Controller
             // Encode lesson_id
             $data['lesson_id'] = json_encode($lessonIds);
 
-            // Buat ID manual
-            $lastId = Product::max('id');
-            $data['id'] = $lastId ? $lastId + 1 : 1;
+
 
             // Simpan data produk
             Product::create([
-                'id' => $data['id'],
+
                 'name' => $data['name'],
                 'grade' => $data['grade'],
                 'semester' => $data['semester'],
@@ -228,21 +226,41 @@ class ProductController extends Controller
 
         if (!$product) {
             return redirect()->route('admin.produk.index')
-                ->with('error', true)
                 ->with('error', 'Produk tidak ditemukan.');
+        }
+
+        // Cek apakah produk masih digunakan di tabel lain
+        $relatedData = [];
+
+        if (\App\Models\Serial::where('product_id', $id)->exists()) {
+            $relatedData[] = 'serial';
+        }
+
+        // Jika masih terhubung dengan data lain
+        if (!empty($relatedData)) {
+            $list = implode(', ', $relatedData);
+            return redirect()->route('admin.produk.index')
+                ->with('error', "Produk tidak dapat dihapus karena masih digunakan oleh data: {$list}.");
         }
 
         try {
             $product->delete();
 
             return redirect()->route('admin.produk.index')
-                ->with('success', true)
                 ->with('success', 'Produk berhasil dihapus.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return redirect()->route('admin.produk.index')
+                    ->with('error', 'Produk tidak dapat dihapus karena masih terhubung dengan data lain.');
+            }
+
+            return redirect()->route('admin.produk.index')
+                ->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
         } catch (\Exception $e) {
             return redirect()->route('admin.produk.index')
-                ->with('error', true)
-                ->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
 
 }

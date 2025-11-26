@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\Model;
 class Theme extends Model
 {
 	protected $table = 'themes';
-	public $incrementing = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'int',

@@ -53,7 +53,7 @@
                     <th>Nama Kelas</th>
                     <th>Kode Serial dipakai</th>
                     <th>Guru Pengajar</th>
-                    <th style="width:220;">Aksi</th>
+                    <th style="width:170px;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="studentBody">
@@ -67,7 +67,7 @@
                         <td>{{ $student->user->name ?? '-' }}</td>
                         <td>
                             <div class="d-flex justify-content-center gap-1">
-                                <button class="btn btn-sm-1" onclick="editStudent('{{ $student->id }}')">Datail /
+                                <button class="btn btn-sm-1" onclick="editStudent('{{ $student->id }}')">Detail /
                                     Edit</button>
                                 <button class="btn btn-sm-2"
                                     onclick="hapusStudent('{{ $student->id }}', '{{ $student->name }}')">Hapus</button>

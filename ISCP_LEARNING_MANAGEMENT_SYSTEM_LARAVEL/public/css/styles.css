@@ -552,7 +552,7 @@ input[type="file"]:active::-webkit-file-upload-button {
 
 
 .alas {
-    margin-top: 90px;
+    margin-top: 70px;
     background: linear-gradient(180deg, var(--warna5), var(--warna6));
     border-radius: 20px;
     border: 4px solid var(--warna2);
@@ -665,11 +665,158 @@ main .btn-sm-2:focus {
     border-radius: 4px;
 }
 
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    /* rasio 16:9 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Kecilkan semua box di dalam lessonTree */
+#lessonTree .border {
+    padding: 6px 10px !important;
+}
+
+#lessonTree .p-2 {
+    padding: 6px !important;
+}
+
+#lessonTree .mb-2,
+#lessonTree .mb-1 {
+    margin-bottom: 4px !important;
+}
+
+/* Kecilkan font judul Materi/Bab/Subbab */
+#lessonTree span,
+#lessonTree strong {
+    font-size: 13px !important;
+}
+
+/* Kecilkan font informasi admin & tanggal */
+#lessonTree small {
+    font-size: 11px !important;
+}
+
+/* Kecilkan tombol */
+#lessonTree .btn-sm,
+#lessonTree .btn-sm-1,
+#lessonTree .btn-sm-2 {
+    padding: 2px 6px !important;
+    font-size: 11px !important;
+}
+
+/* Kurangi indentasi */
+#lessonTree .ms-4 {
+    margin-left: 1rem !important;
+}
+
+#lessonTree .ps-3 {
+    padding-left: 0.8rem !important;
+}
+
+/* Border lebih tipis */
+#lessonTree .border-start {
+    border-width: 1px !important;
+}
+
+#main-content {
+    margin-bottom: 80px;
+}
+
+#adminButtonContainer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px;
+    background: #fff;
+    border-top: 1px solid #e9ecef;
+    z-index: 1050;
+}
+
+#chatUI {
+    margin-top: 1rem;
+}
+
+
+#chatBox {
+    height: 350px;
+    overflow-y: auto;
+    background: #e5ddd5;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.bubble-admin,
+.bubble-user,
+.bubble-system {
+    max-width: 60%;
+    padding: 8px 12px;
+    border-radius: 14px;
+    font-size: 14px;
+    margin-bottom: 6px;
+    word-wrap: break-word;
+    line-height: 1.35;
+}
+
+.bubble-admin {
+    background: #d2f8c2;
+    color: #111;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+.bubble-user {
+    background: #fff;
+    color: #111;
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+}
+
+.bubble-system {
+    max-width: 50%;
+    background: #d79771;
+    color: #333;
+    margin: 10px auto;
+    text-align: center;
+    font-style: italic;
+    border-radius: 10px;
+}
+
+/* Nama pengirim */
+.sender-name {
+    font-size: 8px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+/* Jam kecil di bawah */
+.bubble-time {
+    font-size: 10px;
+    opacity: 0.6;
+    margin-top: 4px;
+    text-align: right;
+}
 
 @media (min-width: 768px) {
     .video-box {
         width: 80%;
     }
+}
+
+.swal2-container {
+    position: fixed !important;
 }
 
 @media (max-width: 768px) {
