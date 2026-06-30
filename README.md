@@ -1,6 +1,6 @@
 # ISCP Learning Management System
 
-Information System Capstone Project (ISCP) — Sistem Manajemen Pembelajaran (Learning Management System) berbasis web yang dikembangkan menggunakan framework Laravel. Sistem ini dirancang untuk mendukung aktivitas pembelajaran digital dengan tiga peran pengguna: admin, guru, dan siswa.
+Information System Capstone Project (ISCP) — Sistem Manajemen Pembelajaran (Learning Management System) berbasis web yang dikembangkan menggunakan framework Laravel. Sistem ini dirancang untuk mendukung aktivitas pembelajaran digital dengan peran pengguna: admin
 
 ## Fitur Utama
 
