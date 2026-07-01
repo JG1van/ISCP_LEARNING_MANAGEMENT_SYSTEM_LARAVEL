@@ -6,8 +6,7 @@
 
 namespace App\Models\Base;
 
-use App\Models\ComplaintHistoryUser;
-use App\Models\ComplaintMessagesUser;
+
 use App\Models\ExerciseItem;
 use App\Models\Post;
 use App\Models\PostChildComment;

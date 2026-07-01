@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Manajemen Kelas')
 @section('page_title', 'Manajemen Kelas')
@@ -74,15 +74,15 @@
                             <div class="d-flex justify-content-center gap-1">
                                 <a href="{{ url('admin/siswa/create?classroom_id=' . $c->id) }}"
                                     class="btn btn-add">Siswa</a>
-                                <button class="btn btn-sm-1" onclick="editKelas({{ $c->id }})">Edit</button>
-                                <button class="btn btn-sm-2"
+                                <button class="btn btn-alt-1" onclick="editKelas({{ $c->id }})">Edit</button>
+                                <button class="btn btn-alt-2"
                                     onclick="hapusKelas({{ $c->id }}, '{{ $c->name }}')">Hapus</button>
                             </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted py-3">Belum ada data kelas.</td>
+                        <td colspan="6" class="text-center text-muted ">Belum ada data kelas.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -94,7 +94,7 @@
         </table>
     </div>
 
-    {{-- 🧩 MODAL TAMBAH KELAS --}}
+    {{--   MODAL TAMBAH KELAS --}}
     <div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <form id="formTambah" class="modal-content">
@@ -122,7 +122,7 @@
                             <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                                 type="text" id="tambahSerialText" class="form-control" placeholder="Belum dipilih"
                                 readonly>
-                            <button type="button" class="btn btn-secondary" onclick="openPilihSerial('tambah')">
+                            <button type="button" class="btn btn-add" onclick="openPilihSerial('tambah')">
                                 Pilih Serial
                             </button>
                         </div>
@@ -135,7 +135,7 @@
         </div>
     </div>
 
-    {{-- 🧩 MODAL EDIT KELAS --}}
+    {{--   MODAL EDIT KELAS --}}
     <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <form id="formEdit" class="modal-content">
@@ -168,7 +168,7 @@
                             <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                                 type="text" id="editSerialText" class="form-control" placeholder="Belum dipilih"
                                 readonly>
-                            <button type="button" class="btn btn-secondary" onclick="openPilihSerial('edit')">
+                            <button type="button" class="btn btn-alt-1" onclick="openPilihSerial('edit')">
                                 Pilih Serial
                             </button>
                         </div>
@@ -192,7 +192,7 @@
                 <div class="modal-body">
                     <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="text"
                         id="searchSerial" class="form-control mb-3" placeholder="Cari serial atau guru...">
-                    <div class="table-responsive">
+                    <div class="table-responsive  table-wrapper">
                         <table class="table table-bordered table-hover text-center align-middle">
                             <thead>
                                 <tr>
@@ -203,7 +203,7 @@
                                 </tr>
                             </thead>
                             <tbody id="serialTableBody">
-                                @foreach ($serials as $s)
+                                @forelse ($serials as $s)
                                     <tr>
                                         <td>{{ $s->serial }}</td>
                                         <td>{{ $s->user->name ?? 'Belum Ditentukan' }}</td>
@@ -215,8 +215,19 @@
                                             </button>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-muted text-center">Tidak ada data serial.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3"></th>
+                                    <th colspan="3"></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

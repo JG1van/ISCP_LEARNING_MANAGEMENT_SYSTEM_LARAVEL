@@ -11,9 +11,7 @@ use App\Models\Theme;
 
 class LessonController extends Controller
 {
-    /**
-     * Middleware untuk autentikasi admin.
-     */
+    public const ALLOWED_ROLES = [1, 2, 4];
     public function __construct()
     {
         $this->middleware(['auth']);
@@ -46,7 +44,7 @@ class LessonController extends Controller
                 $request->all(),
                 [
                     'mapel_id' => 'required|exists:mapels,id',
-                    'name' => 'required|string|max:50|unique:lessons,name',
+                    'name' => 'required|string|max:50',
                     'grade' => 'required|string|max:10',
                     'semester' => 'required|integer|min:1|max:2',
                     'category' => 'required|integer|min:1|max:3',
@@ -55,7 +53,6 @@ class LessonController extends Controller
                     'mapel_id.required' => 'Mata pelajaran wajib dipilih.',
                     'mapel_id.exists' => 'Mata pelajaran tidak ditemukan.',
                     'name.required' => 'Nama pelajaran wajib diisi.',
-                    'name.unique' => 'Nama pelajaran sudah digunakan, silakan pilih nama lain.',
                     'grade.required' => 'Kelas wajib diisi.',
                     'semester.required' => 'Semester wajib diisi.',
                     'category.required' => 'Kategori wajib diisi.',
@@ -132,7 +129,7 @@ class LessonController extends Controller
             $request->all(),
             [
                 'mapel_id' => 'required|exists:mapels,id',
-                'name' => 'required|string|max:50|unique:lessons,name,' . $id,
+                'name' => 'required|string|max:50',
                 'grade' => 'required|string|max:10',
                 'semester' => 'required|integer|min:1|max:2',
                 'category' => 'required|integer|min:1|max:3',
@@ -141,7 +138,6 @@ class LessonController extends Controller
                 'mapel_id.required' => 'Mata pelajaran wajib dipilih.',
                 'mapel_id.exists' => 'Mata pelajaran tidak ditemukan.',
                 'name.required' => 'Nama pelajaran wajib diisi.',
-                'name.unique' => 'Nama pelajaran sudah digunakan oleh pelajaran lain.',
                 'grade.required' => 'Kelas wajib diisi.',
                 'semester.required' => 'Semester wajib diisi.',
                 'category.required' => 'Kategori wajib diisi.',
@@ -208,7 +204,7 @@ class LessonController extends Controller
         }
 
         if (\App\Models\Exercise::where('lesson_id', $id)->exists()) {
-            $relatedData[] = 'latihan/soal';
+            $relatedData[] = 'soal/soal';
         }
 
         if (\App\Models\Competence::where('lesson_id', $id)->exists()) {

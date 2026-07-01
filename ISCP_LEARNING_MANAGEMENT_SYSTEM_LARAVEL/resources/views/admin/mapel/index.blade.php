@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Manajemen Mata Pelajaran')
 @section('page_title', 'Manajemen Mata Pelajaran')
@@ -35,8 +35,8 @@
                         <td class="mapel-name">{{ $item->name }}</td>
                         <td>
                             <div class="d-flex justify-content-center gap-1">
-                                <button class="btn btn-sm-1" onclick="editMapel('{{ $item->id }}')">Edit</button>
-                                <button class="btn btn-sm-2"
+                                <button class="btn btn-alt-1" onclick="editMapel('{{ $item->id }}')">Edit</button>
+                                <button class="btn btn-alt-2"
                                     onclick="hapusMapel('{{ $item->id }}', '{{ $item->name }}')">Hapus</button>
                             </div>
                         </td>

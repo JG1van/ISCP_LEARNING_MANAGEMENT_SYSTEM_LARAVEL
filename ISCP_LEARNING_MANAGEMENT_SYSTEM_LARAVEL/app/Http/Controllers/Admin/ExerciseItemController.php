@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class ExerciseItemController extends Controller
 {
+    public const ALLOWED_ROLES = [1, 2, 4];
     public function __construct()
     {
         $this->middleware(['auth']);
@@ -28,15 +29,15 @@ class ExerciseItemController extends Controller
         // 🔹 Ambil data kompetensi untuk dropdown KD
         $competences = Competence::where('lesson_id', $lesson_id)->get();
 
-        // 🔹 Ambil data pelajaran & latihan
+        // 🔹 Ambil data pelajaran & soal
         $lesson = Lesson::find($lesson_id);
         $exercise = Exercise::find($exercise_id);
 
         if (!$lesson || !$exercise) {
-            return redirect()->back()->with('error', 'Data pelajaran atau latihan tidak ditemukan.');
+            return redirect()->back()->with('error', 'Data pelajaran atau soal tidak ditemukan.');
         }
 
-        // 🔹 Ambil daftar soal latihan + relasi kompetensi & pembuat
+        // 🔹 Ambil daftar soal soal + relasi kompetensi & pembuat
         $exerciseItems = ExerciseItem::with(['competence', 'admin', 'user'])
             ->where('exercise_id', $exercise_id)
             ->orderBy('id', 'asc') // urutkan berdasarkan kolom ID
@@ -158,7 +159,7 @@ class ExerciseItemController extends Controller
                 ]);
             });
 
-            return redirect()->route('admin.pelajaran.latihan_soal.soal.index', [
+            return redirect()->route('admin.pelajaran.judul_soal.soal.index', [
                 'lesson_id' => $lesson_id,
                 'exercise_id' => $exercise_id,
             ])->with('success', 'Soal berhasil ditambahkan.');
@@ -179,7 +180,7 @@ class ExerciseItemController extends Controller
         $exercise = Exercise::find($exercise_id);
 
         if (!$lesson || !$exercise) {
-            return redirect()->back()->with('error', 'Data pelajaran atau latihan tidak ditemukan.');
+            return redirect()->back()->with('error', 'Data pelajaran atau soal tidak ditemukan.');
         }
 
         // Ambil item soal beserta relasi (competence, admin, user)
@@ -294,7 +295,7 @@ class ExerciseItemController extends Controller
                 $item->save();
             });
 
-            return redirect()->route('admin.pelajaran.latihan_soal.soal.index', [
+            return redirect()->route('admin.pelajaran.judul_soal.soal.index', [
                 'lesson_id' => $lesson_id,
                 'exercise_id' => $exercise_id,
             ])->with('success', 'Soal berhasil diperbarui.');

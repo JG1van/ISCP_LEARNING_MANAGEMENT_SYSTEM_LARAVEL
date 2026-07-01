@@ -16,6 +16,7 @@ use App\Models\ShareExercise;
 use App\Models\Student;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\SerialLog;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -107,4 +108,9 @@ class Serial extends Model
 	{
 		return $this->hasMany(Task::class);
 	}
+	public function logs()
+	{
+		return $this->hasMany(SerialLog::class, 'serial_id');
+	}
+
 }

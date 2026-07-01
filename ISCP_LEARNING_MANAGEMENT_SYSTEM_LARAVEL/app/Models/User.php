@@ -10,7 +10,6 @@ class User extends BaseUser implements AuthenticatableContract
 {
 	use Authenticatable;
 
-	public $role = 'guru';
 
 	protected $hidden = [
 		'password',

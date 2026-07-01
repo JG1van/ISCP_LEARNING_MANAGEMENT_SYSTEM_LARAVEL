@@ -10,9 +10,12 @@ use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
+use App\Models\SerialLog;
 
 class SerialController extends Controller
 {
+    public const ALLOWED_ROLES = [1, 2, 3];
     public function __construct()
     {
         $this->middleware(['auth']);
@@ -45,12 +48,13 @@ class SerialController extends Controller
     public function store(Request $request)
     {
         try {
+            // Validasi input
             $validator = \Validator::make(
                 $request->all(),
                 [
                     'product_id' => 'required|exists:products,id',
-                    'paket' => 'required|integer|min:1|max:9',
-                    'active' => 'required|integer|min:1|max:120',
+                    'paket' => 'required|regex:/^[0-9]{1}$/',
+                    'active' => 'required|regex:/^[0-9]{1,3}$/',
                     'user_id' => 'nullable|exists:users,id',
                 ],
                 [
@@ -69,7 +73,7 @@ class SerialController extends Controller
                 ], 422);
             }
 
-            // Cegah duplikasi user–produk
+            // Cegah user memiliki serial produk yang sama
             if ($request->user_id) {
                 $exists = Serial::where('user_id', $request->user_id)
                     ->where('product_id', $request->product_id)
@@ -83,26 +87,59 @@ class SerialController extends Controller
                 }
             }
 
+            // Generate serial unik
+            $serialCode = $this->generateSerial();
+
+            // Insert data serial
             $serial = Serial::create([
                 'user_id' => $request->user_id,
                 'product_id' => $request->product_id,
-                'serial' => $this->generateSerial(),
+                'serial' => $serialCode,
                 'paket' => $request->paket,
                 'active' => $request->active,
                 'expired_at' => null,
             ]);
+
+            // ============================================================
+            // ⬇️ Tambahkan Log Baru
+            // ============================================================
+            SerialLog::create([
+                'serial_id' => $serial->id,
+                'active' => $serial->active,
+                'status' => 'Baru',
+            ]);
+            // ============================================================
 
             return response()->json([
                 'success' => true,
                 'message' => 'Serial berhasil ditambahkan.',
                 'data' => $serial,
             ]);
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menambahkan serial: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+
+    /**
+     * Generate serial anti-duplikasi
+     */
+    private function generateSerial()
+    {
+        do {
+            $code = strtoupper(
+                Str::random(5) . '-' .
+                Str::random(5) . '-' .
+                Str::random(5) . '-' .
+                Str::random(5)
+            );
+        } while (Serial::where('serial', $code)->exists());
+
+        return $code;
     }
 
     /**
@@ -139,8 +176,8 @@ class SerialController extends Controller
             $request->all(),
             [
                 'product_id' => 'required|exists:products,id',
-                'paket' => 'required|integer|min:1|max:9',
-                'active' => 'nullable|integer|min:1|max:120',
+                'paket' => 'required|regex:/^[0-9]{1}$/',
+                'active' => 'required|regex:/^[0-9]{1,3}$/',
                 'user_id' => 'nullable|exists:users,id',
             ],
             [
@@ -266,14 +303,7 @@ class SerialController extends Controller
     /**
      * Generate serial unik
      */
-    private function generateSerial()
-    {
-        do {
-            $code = strtoupper(Str::random(5) . '-' . Str::random(5) . '-' . Str::random(5) . '-' . Str::random(5));
-        } while (Serial::where('serial', $code)->exists());
 
-        return $code;
-    }
     public function extend(Request $request, $id)
     {
         $serial = Serial::find($id);
@@ -319,20 +349,29 @@ class SerialController extends Controller
                 }
             }
 
-            // ✅ Batas maksimal TIMESTAMP
-            $maxTimestamp = Carbon::create(2038);
-
+            // Batas maksimal
+            $maxTimestamp = Carbon::create(2038, 1, 19, 3, 14, 7);
             if ($newExpired->greaterThan($maxTimestamp)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Perpanjangan gagal karena tanggal kedaluwarsa melebihi batas maksimal sistem, yaitu tahun 2038. Batas maksimal tipe TIMESTAMP adalah tahun 2038. Silakan kurangi jumlah bulan perpanjangan.',
+                    'message' => 'Perpanjangan gagal karena tanggal kedaluwarsa melebihi batas sistem.',
                 ], 422);
             }
 
-            // Jika aman, simpan perubahan
+            // Simpan perubahan serial
             $serial->expired_at = $newExpired;
             $serial->active = (int) $serial->active + (int) $request->extend_months;
             $serial->save();
+
+            // ============================================================
+            // ⬇️ Insert Log Perpanjangan
+            // ============================================================
+            SerialLog::create([
+                'serial_id' => $serial->id,
+                'active' => $request->extend_months, // jumlah perpanjangan
+                'status' => 'Perpanjang',
+            ]);
+            // ============================================================
 
             return response()->json([
                 'success' => true,
@@ -347,6 +386,77 @@ class SerialController extends Controller
             ], 500);
         }
     }
+    public function riwayat()
+    {
+        $logs = SerialLog::with('serial')->latest()->get();
+
+        return view('admin.serial.riwayat', compact('logs'));
+    }
+
+    public function sendSerialEmail(Request $request)
+    {
+
+
+        $request->validate([
+            'serial_id' => 'required',
+            'email' => 'required|email'
+        ]);
+
+        $serial = Serial::findOrFail($request->serial_id);
+
+        $payload = [
+            "sender" => [
+                "name" => env('MAIL_FROM_NAME'),
+                "email" => env('MAIL_FROM_ADDRESS'),
+            ],
+            "to" => [
+                ["email" => $request->email]
+            ],
+            "subject" => "Informasi Serial Produk Anda",
+            "htmlContent" => "
+        <h3>Informasi Serial Produk Anda</h3>
+
+        <p>Terima kasih telah berlangganan layanan kami.</p>
+        <p>Berikut adalah informasi lengkap mengenai serial produk yang terdaftar pada akun Anda:</p>
+
+        <p><b>Kode Serial Anda:</b></p>
+        <h2 style='letter-spacing:3px; margin-top:5px;'>{$serial->serial}</h2>
+
+        <br>
+
+        <p><b>Detail Produk:</b></p>
+        <p>Nama produk : <b>{$serial->product->name}</b></p>
+        <p>Paket kelas: <b>{$serial->paket} kelas</b></p>
+        <p>Durasi langganan: <b>{$serial->active} bulan</b></p>
+
+        <br>
+
+        <p>Jika Anda memerlukan bantuan atau memiliki pertanyaan lebih lanjut, tim kami siap membantu kapan saja.</p>
+
+        <p>Hormat kami,<br>
+        <b>" . env('MAIL_FROM_NAME') . "</b></p>
+    "
+        ];
+
+
+        $response = Http::withHeaders([
+            'api-key' => env('BREVO_API_KEY'),
+            'accept' => 'application/json',
+            'content-type' => 'application/json',
+        ])->post('https://api.brevo.com/v3/smtp/email', $payload);
+
+        if ($response->successful()) {
+            return response()->json(['success' => true, 'message' => 'Email berhasil dikirim']);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => $response->json()['message'] ?? 'Gagal mengirim email (Unknown Error)'
+        ], 500);
+
+
+    }
+
 
 }
 

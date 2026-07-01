@@ -12,16 +12,14 @@ use App\Models\Serial;
 
 class ExerciseController extends Controller
 {
-    /**
-     * Middleware untuk autentikasi admin.
-     */
+    public const ALLOWED_ROLES = [1, 2, 4];
     public function __construct()
     {
         $this->middleware(['auth']);
     }
 
     /**
-     * Tampilkan daftar latihan berdasarkan pelajaran.
+     * Tampilkan daftar soal berdasarkan pelajaran.
      */
     public function index(Request $request, $lesson_id)
     {
@@ -49,11 +47,11 @@ class ExerciseController extends Controller
         $types = ExerciseType::orderBy('id', 'asc')->get();
         $serials = Serial::orderBy('id', 'asc')->get();
 
-        return view('admin.pelajaran.latihan_soal', compact('lesson', 'data', 'types', 'serials'));
+        return view('admin.pelajaran.judul_soal', compact('lesson', 'data', 'types', 'serials'));
     }
 
     /**
-     * Simpan latihan baru.
+     * Simpan soal baru.
      */
     public function store(Request $request, $lesson_id)
     {
@@ -66,11 +64,11 @@ class ExerciseController extends Controller
                     'serial_id' => 'nullable|exists:serials,id',
                 ],
                 [
-                    'exercise_type_id.required' => 'Tipe latihan wajib dipilih.',
-                    'exercise_type_id.exists' => 'Tipe latihan tidak ditemukan.',
-                    'title.required' => 'Judul latihan wajib diisi.',
-                    'title.unique' => 'Judul latihan sudah digunakan, silakan pilih judul lain.',
-                    'title.max' => 'Judul latihan maksimal 200 karakter.',
+                    'exercise_type_id.required' => 'Tipe soal wajib dipilih.',
+                    'exercise_type_id.exists' => 'Tipe soal tidak ditemukan.',
+                    'title.required' => 'Judul soal wajib diisi.',
+                    'title.unique' => 'Judul soal sudah digunakan, silakan pilih judul lain.',
+                    'title.max' => 'Judul soal maksimal 200 karakter.',
                     'serial_id.exists' => 'Serial tidak valid.',
                 ]
             );
@@ -94,19 +92,19 @@ class ExerciseController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Latihan berhasil ditambahkan.',
+                'message' => 'Soal berhasil ditambahkan.',
                 'data' => $exercise,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menambahkan latihan: ' . $e->getMessage(),
+                'message' => 'Gagal menambahkan soal: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Ambil data latihan berdasarkan ID.
+     * Ambil data soal berdasarkan ID.
      */
     public function edit($lesson_id, $id)
     {
@@ -115,7 +113,7 @@ class ExerciseController extends Controller
         if (!$exercise) {
             return response()->json([
                 'success' => false,
-                'message' => 'Latihan tidak ditemukan.',
+                'message' => 'Soal tidak ditemukan.',
             ], 404);
         }
 
@@ -126,7 +124,7 @@ class ExerciseController extends Controller
     }
 
     /**
-     * Update data latihan.
+     * Update data soal.
      */
     public function update(Request $request, $lesson_id, $id)
     {
@@ -135,7 +133,7 @@ class ExerciseController extends Controller
         if (!$exercise) {
             return response()->json([
                 'success' => false,
-                'message' => 'Latihan tidak ditemukan.',
+                'message' => 'Soal tidak ditemukan.',
             ], 404);
         }
 
@@ -147,11 +145,11 @@ class ExerciseController extends Controller
                 'serial_id' => 'nullable|exists:serials,id',
             ],
             [
-                'exercise_type_id.required' => 'Tipe latihan wajib dipilih.',
-                'exercise_type_id.exists' => 'Tipe latihan tidak ditemukan.',
-                'title.required' => 'Judul latihan wajib diisi.',
-                'title.unique' => 'Judul latihan sudah digunakan oleh latihan lain.',
-                'title.max' => 'Judul latihan maksimal 200 karakter.',
+                'exercise_type_id.required' => 'Tipe soal wajib dipilih.',
+                'exercise_type_id.exists' => 'Tipe soal tidak ditemukan.',
+                'title.required' => 'Judul soal wajib diisi.',
+                'title.unique' => 'Judul soal sudah digunakan oleh soal lain.',
+                'title.max' => 'Judul soal maksimal 200 karakter.',
                 'serial_id.exists' => 'Serial tidak valid.',
             ]
         );
@@ -172,19 +170,19 @@ class ExerciseController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Latihan berhasil diperbarui.',
+                'message' => 'Soal berhasil diperbarui.',
                 'data' => $exercise,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal memperbarui latihan: ' . $e->getMessage(),
+                'message' => 'Gagal memperbarui soal: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Hapus latihan.
+     * Hapus soal.
      */
     public function destroy($lesson_id, $id)
     {
@@ -193,7 +191,7 @@ class ExerciseController extends Controller
         if (!$exercise) {
             return response()->json([
                 'success' => false,
-                'message' => 'Latihan tidak ditemukan.',
+                'message' => 'Soal tidak ditemukan.',
             ], 404);
         }
 
@@ -202,19 +200,19 @@ class ExerciseController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Latihan berhasil dihapus.',
+                'message' => 'Soal berhasil dihapus.',
             ]);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Latihan tidak dapat dihapus karena masih terhubung dengan data lain.',
+                    'message' => 'Soal tidak dapat dihapus karena masih terhubung dengan data lain.',
                 ], 409);
             }
 
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menghapus latihan: ' . $e->getMessage(),
+                'message' => 'Gagal menghapus soal: ' . $e->getMessage(),
             ], 500);
         }
     }

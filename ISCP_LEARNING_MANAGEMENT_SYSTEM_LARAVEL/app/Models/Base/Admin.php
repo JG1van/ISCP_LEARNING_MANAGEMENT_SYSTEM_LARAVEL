@@ -6,10 +6,7 @@
 
 namespace App\Models\Base;
 
-use App\Models\ComplaintHistoryStudent;
-use App\Models\ComplaintHistoryUser;
-use App\Models\ComplaintMessagesStudent;
-use App\Models\ComplaintMessagesUser;
+
 use App\Models\ExerciseItem;
 use App\Models\LessonItem;
 use Carbon\Carbon;
@@ -33,10 +30,7 @@ use Illuminate\Notifications\Notifiable;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
- * @property Collection|ComplaintHistoryStudent[] $complaint_history_students
- * @property Collection|ComplaintHistoryUser[] $complaint_history_users
- * @property Collection|ComplaintMessagesStudent[] $complaint_messages_students
- * @property Collection|ComplaintMessagesUser[] $complaint_messages_users
+
  * @property Collection|ExerciseItem[] $exercise_items
  * @property Collection|LessonItem[] $lesson_items
  *
@@ -55,25 +49,7 @@ class Admin extends Authenticatable
 		'login_at' => 'datetime',
 	];
 
-	public function complaint_history_students()
-	{
-		return $this->hasMany(ComplaintHistoryStudent::class);
-	}
 
-	public function complaint_history_users()
-	{
-		return $this->hasMany(ComplaintHistoryUser::class);
-	}
-
-	public function complaint_messages_students()
-	{
-		return $this->hasMany(ComplaintMessagesStudent::class);
-	}
-
-	public function complaint_messages_users()
-	{
-		return $this->hasMany(ComplaintMessagesUser::class);
-	}
 
 	public function exercise_items()
 	{

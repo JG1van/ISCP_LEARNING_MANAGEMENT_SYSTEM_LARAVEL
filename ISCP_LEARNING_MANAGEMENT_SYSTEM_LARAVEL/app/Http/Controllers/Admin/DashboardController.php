@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public const ALLOWED_ROLES = [1, 2, 3, 4, 5];
     public function index()
     {
         // Statistik utama

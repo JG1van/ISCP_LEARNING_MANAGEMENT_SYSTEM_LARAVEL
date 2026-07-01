@@ -10,10 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-    /**
-     * Konstruktor
-     * Menerapkan middleware auth dan is_admin agar hanya admin yang dapat mengakses controller ini.
-     */
+    public const ALLOWED_ROLES = [1, 2, 3];
     public function __construct()
     {
         $this->middleware(['auth']);

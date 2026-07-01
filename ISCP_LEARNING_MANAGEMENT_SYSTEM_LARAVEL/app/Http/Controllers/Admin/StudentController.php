@@ -13,6 +13,7 @@ use App\Models\Serial;
 
 class StudentController extends Controller
 {
+    public const ALLOWED_ROLES = [1, 2, 3];
     public function __construct()
     {
         $this->middleware(['auth']);

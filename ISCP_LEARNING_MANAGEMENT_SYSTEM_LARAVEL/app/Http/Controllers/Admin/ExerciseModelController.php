@@ -9,16 +9,14 @@ use App\Models\ExerciseModel;
 
 class ExerciseModelController extends Controller
 {
-    /**
-     * Middleware untuk autentikasi admin.
-     */
+    public const ALLOWED_ROLES = [1, 2, 4];
     public function __construct()
     {
         $this->middleware(['auth']);
     }
 
     /**
-     * Tampilkan daftar model latihan.
+     * Tampilkan daftar model soal.
      */
     public function index(Request $request)
     {
@@ -29,7 +27,7 @@ class ExerciseModelController extends Controller
 
         $data = ExerciseModel::orderBy('id', 'asc')->get();
 
-        return view('admin.pra_latihan.model', compact('data'));
+        return view('admin.pra-soal.model', compact('data'));
     }
 
     /**
@@ -44,9 +42,9 @@ class ExerciseModelController extends Controller
                     'name' => 'required|string|max:20|unique:exercise_models,name',
                 ],
                 [
-                    'name.required' => 'Nama model latihan wajib diisi.',
-                    'name.unique' => 'Nama model latihan sudah digunakan.',
-                    'name.max' => 'Nama model latihan maksimal 20 karakter.',
+                    'name.required' => 'Nama model soal wajib diisi.',
+                    'name.unique' => 'Nama model soal sudah digunakan.',
+                    'name.max' => 'Nama model soal maksimal 20 karakter.',
                 ]
             );
 
@@ -66,19 +64,19 @@ class ExerciseModelController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Model latihan berhasil ditambahkan.',
+                'message' => 'Model soal berhasil ditambahkan.',
                 'data' => $model,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menambahkan model latihan: ' . $e->getMessage(),
+                'message' => 'Gagal menambahkan model soal: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Ambil data model latihan berdasarkan ID.
+     * Ambil data model soal berdasarkan ID.
      */
     public function edit($id)
     {
@@ -87,7 +85,7 @@ class ExerciseModelController extends Controller
         if (!$model) {
             return response()->json([
                 'success' => false,
-                'message' => 'Model latihan tidak ditemukan.',
+                'message' => 'Model soal tidak ditemukan.',
             ], 404);
         }
 
@@ -98,7 +96,7 @@ class ExerciseModelController extends Controller
     }
 
     /**
-     * Update data model latihan.
+     * Update data model soal.
      */
     public function update(Request $request, $id)
     {
@@ -107,7 +105,7 @@ class ExerciseModelController extends Controller
         if (!$model) {
             return response()->json([
                 'success' => false,
-                'message' => 'Model latihan tidak ditemukan.',
+                'message' => 'Model soal tidak ditemukan.',
             ], 404);
         }
 
@@ -117,9 +115,9 @@ class ExerciseModelController extends Controller
                 'name' => 'required|string|max:20|unique:exercise_models,name,' . $id,
             ],
             [
-                'name.required' => 'Nama model latihan wajib diisi.',
-                'name.unique' => 'Nama model latihan sudah digunakan oleh model lain.',
-                'name.max' => 'Nama model latihan maksimal 20 karakter.',
+                'name.required' => 'Nama model soal wajib diisi.',
+                'name.unique' => 'Nama model soal sudah digunakan oleh model lain.',
+                'name.max' => 'Nama model soal maksimal 20 karakter.',
             ]
         );
 
@@ -137,19 +135,19 @@ class ExerciseModelController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Model latihan berhasil diperbarui.',
+                'message' => 'Model soal berhasil diperbarui.',
                 'data' => $model,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal memperbarui model latihan: ' . $e->getMessage(),
+                'message' => 'Gagal memperbarui model soal: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Hapus model latihan.
+     * Hapus model soal.
      */
     public function destroy($id)
     {
@@ -158,11 +156,11 @@ class ExerciseModelController extends Controller
         if (!$model) {
             return response()->json([
                 'success' => false,
-                'message' => 'Model latihan tidak ditemukan.',
+                'message' => 'Model soal tidak ditemukan.',
             ], 404);
         }
 
-        // Cek apakah model latihan masih digunakan
+        // Cek apakah model soal masih digunakan
         $relatedData = [];
 
         if (\App\Models\ExerciseItem::where('exercise_model_id', $id)->exists()) {
@@ -174,7 +172,7 @@ class ExerciseModelController extends Controller
             $list = implode(', ', $relatedData);
             return response()->json([
                 'success' => false,
-                'message' => "Model latihan tidak dapat dihapus karena masih terhubung dengan data: {$list}.",
+                'message' => "Model soal tidak dapat dihapus karena masih terhubung dengan data: {$list}.",
             ], 409);
         }
 
@@ -183,19 +181,19 @@ class ExerciseModelController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Model latihan berhasil dihapus.',
+                'message' => 'Model soal berhasil dihapus.',
             ]);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Model latihan tidak dapat dihapus karena masih terhubung dengan data lain.',
+                    'message' => 'Model soal tidak dapat dihapus karena masih terhubung dengan data lain.',
                 ], 409);
             }
 
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menghapus model latihan: ' . $e->getMessage(),
+                'message' => 'Gagal menghapus model soal: ' . $e->getMessage(),
             ], 500);
         }
     }

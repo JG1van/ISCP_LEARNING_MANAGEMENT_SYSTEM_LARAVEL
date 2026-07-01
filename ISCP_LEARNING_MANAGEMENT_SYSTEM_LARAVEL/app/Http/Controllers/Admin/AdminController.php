@@ -13,6 +13,8 @@ use App\Models\Admin;
 
 class AdminController extends Controller
 {
+    public const ALLOWED_ROLES = [1];
+
     public function __construct()
     {
         $this->middleware(['auth']);
@@ -83,7 +85,7 @@ class AdminController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Admin berhasil ditambahkan (password default: Admin1234).',
+                'message' => 'Admin berhasil ditambahkan.',
                 'data' => $admin,
             ]);
         } catch (\Exception $e) {
@@ -166,24 +168,23 @@ class AdminController extends Controller
         ]);
 
         // Upload foto jika ada
+
         if ($request->hasFile('photo')) {
 
-            // Hapus foto lama jika ada
-            if (!empty($admin->img)) {
-                $oldFile = public_path('images/admins/' . $admin->img);
-                if (file_exists($oldFile)) {
-                    @unlink($oldFile);
-                }
+            // Hapus foto lama dari storage
+            if ($admin->img && Storage::disk('public')->exists('admins/' . $admin->img)) {
+                Storage::disk('public')->delete('admins/' . $admin->img);
             }
 
-            // Simpan foto baru
-            $extension = $request->file('photo')->getClientOriginalExtension();
-            $filename = 'foto-' . $request->username . '-' . time() . '.' . $extension;
-            $request->file('photo')->move(public_path('images/admins'), $filename);
+            // Simpan foto baru ke storage/app/public/admins/
+            $path = $request->file('photo')->store('admins', 'public');
 
-            $admin->img = $filename;
+            // Simpan nama file baru ke database
+            $admin->img = basename($path);
+
             $admin->save();
         }
+
 
         return response()->json(['success' => true, 'message' => 'Data admin berhasil diperbarui.']);
     }
@@ -228,9 +229,8 @@ class AdminController extends Controller
         try {
             // Hapus gambar admin jika ada
             if ($admin->img) {
-                $imagePath = public_path('images/admins/' . $admin->img);
-                if (file_exists($imagePath)) {
-                    @unlink($imagePath);
+                if ($admin->img && Storage::disk('public')->exists('admins/' . $admin->img)) {
+                    Storage::disk('public')->delete('admins/' . $admin->img);
                 }
             }
 

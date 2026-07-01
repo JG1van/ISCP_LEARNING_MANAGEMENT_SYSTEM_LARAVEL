@@ -70,29 +70,26 @@ class AdminProfilController extends Controller
             'phone' => $request->phone,
         ]);
 
-        // Upload foto baru
+        // Upload foto baru (jika ada)
         if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $filename = 'foto-' . $admin->id . '-' . time() . '.' . $file->getClientOriginalExtension();
 
-            // hapus foto lama
-            if ($admin->img && file_exists(public_path('images/admins/' . $admin->img))) {
-                unlink(public_path('images/admins/' . $admin->img));
+            // Hapus foto lama jika ada dan file-nya benar-benar ada
+            if (!empty($admin->img) && \Storage::disk('public')->exists('admins/' . $admin->img)) {
+                \Storage::disk('public')->delete('admins/' . $admin->img);
             }
 
-            // simpan foto baru
-            $file->move(public_path('images/admins'), $filename);
-            $admin->img = $filename;
-
-            $admin->save();
+            // Simpan foto baru
+            $path = $request->file('photo')->store('admins', 'public');
+            $admin->img = basename($path);
         }
 
         // Ganti password jika diisi
         if ($request->filled('current_password') && $request->filled('new_password')) {
+
             if (!Hash::check($request->current_password, $admin->password)) {
                 return back()->withErrors(['current_password' => 'Password lama tidak sesuai.']);
-
             }
+
             $admin->password = Hash::make($request->new_password);
         }
 
@@ -100,6 +97,7 @@ class AdminProfilController extends Controller
 
         return back()->with('success', 'Profil berhasil diperbarui!');
     }
+
 
 
     /**

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Kompetensi Dasar')
 @section('page_title')
@@ -58,8 +58,8 @@
                             <td class="kd-desc">{{ $item->description }}</td>
                             <td>
                                 <div class="d-flex justify-content-center gap-1">
-                                    <button class="btn btn-sm-1" onclick="editKD('{{ $item->id }}')">Edit</button>
-                                    <button class="btn btn-sm-2"
+                                    <button class="btn btn-alt-1" onclick="editKD('{{ $item->id }}')">Edit</button>
+                                    <button class="btn btn-alt-2"
                                         onclick="hapusKD('{{ $item->id }}', '{{ $item->point }}')">Hapus</button>
                                 </div>
                             </td>

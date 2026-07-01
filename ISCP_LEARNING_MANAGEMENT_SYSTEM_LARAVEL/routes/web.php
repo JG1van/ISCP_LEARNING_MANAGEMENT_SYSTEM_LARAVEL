@@ -20,9 +20,9 @@ use App\Http\Controllers\Admin\SerialController;
 use App\Http\Controllers\Admin\ClassroomController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\StudentController;
-use App\Http\Controllers\Admin\ComplaintAdminController;
-use App\Http\Controllers\ComplaintController;
-use App\Http\Controllers\Admin\ComplaintCategoryController;
+use App\Http\Controllers\Admin\CSAdminController;
+use App\Http\Controllers\CSController;
+use App\Http\Controllers\Admin\QuestionCategoryController;
 use App\Http\Controllers\Admin\ImportMateriController;
 use App\Http\Controllers\Admin\DashboardController;
 use Kreait\Firebase\Factory;
@@ -30,7 +30,7 @@ use Kreait\Firebase\Factory;
 
 
 //  ROUTE AWAL
-Route::get('/', fn() => redirect('/login'));
+Route::get('/', fn() => view('welcome'));
 
 
 Route::get('/login', [App\Http\Controllers\Auth\LoginAllController::class, 'showLogin'])->name('login');
@@ -61,7 +61,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('pelajaran', LessonController::class);
 
     // 🏋️ PRA LATIHAN (TIPE & MODEL)
-    Route::prefix('pra_latihan')->name('pra_latihan.')->group(function () {
+    Route::prefix('pra-soal')->name('pra-soal.')->group(function () {
         Route::resource('tipe', ExerciseTypeController::class);
         Route::resource('model', ExerciseModelController::class);
     });
@@ -106,9 +106,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // ==========================
     // LATIHAN SOAL + SOAL DI DALAM LATIHAN
     // ==========================
-    Route::prefix('pelajaran/{lesson_id}/latihan_soal')->name('pelajaran.latihan_soal.')->group(function () {
+    Route::prefix('pelajaran/{lesson_id}/judul_soal')->name('pelajaran.judul_soal.')->group(function () {
 
-        //  Daftar Latihan
+        //  Daftar Soal
         Route::get('/', [ExerciseController::class, 'index'])->name('index');
         Route::get('/create', [ExerciseController::class, 'create'])->name('create');
         Route::post('/', [ExerciseController::class, 'store'])->name('store');
@@ -116,7 +116,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::put('/{exercise_id}', [ExerciseController::class, 'update'])->name('update');
         Route::delete('/{exercise_id}', [ExerciseController::class, 'destroy'])->name('destroy');
 
-        //  Soal di dalam Latihan
+        //  Soal di dalam Soal
         Route::prefix('{exercise_id}/soal')->name('soal.')->group(function () {
             Route::get('/', [ExerciseItemController::class, 'index'])->name('index');
             Route::get('/create', [ExerciseItemController::class, 'create'])->name('create');
@@ -128,8 +128,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
 
     //  SERIAL
+    Route::get('/serial/riwayat', [SerialController::class, 'riwayat'])
+        ->name('serial.riwayat');
     Route::resource('serial', SerialController::class);
     Route::post('/serial/{id}/extend', [SerialController::class, 'extend'])->name('serial.extend');
+    Route::post('/serial/kirim-email', [SerialController::class, 'sendSerialEmail'])
+        ->name('serial.kirim_email');
 
     //  KELAS
     Route::resource('kelas', ClassroomController::class);
@@ -157,48 +161,60 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::post('update', [AdminProfilController::class, 'update'])->name('update');
         Route::post('destroy', [AdminProfilController::class, 'destroy'])->name('destroy');
     });
-    Route::resource('kategori_pengaduan', ComplaintCategoryController::class);
+    Route::resource('kategori-pertanyaan', QuestionCategoryController::class);
 
 
 });
 
 
 // --- ROUTE PUBLIC --- //
-Route::get('/pengaduan', [ComplaintController::class, 'showCreateForm'])
-    ->name('pengaduan.index');
-Route::get('/pengaduan/create', [ComplaintController::class, 'createRoom'])
-    ->name('pengaduan.create');
-Route::post('/pengaduan/continue', [ComplaintController::class, 'continueComplaint'])
-    ->name('pengaduan.continue');
-Route::post('/pengaduan/assign-category/{code}', [ComplaintController::class, 'assignCategory'])
-    ->name('pengaduan.assign_category');
-Route::post('/pengaduan/set-admin/{id}', [ComplaintController::class, 'setAdminStatus'])
-    ->name('pengaduan.set_admin');
-Route::post('/pengaduan/finish/{code}', [ComplaintController::class, 'userFinish'])
-    ->name('pengaduan.finish');
-Route::get('/pengaduan/ruang/{code}', [ComplaintController::class, 'userChat'])
-    ->name('pengaduan.ruang_pesan');
+Route::get('/layanan-pelanggan-pelapor', [CSController::class, 'showCreateForm'])
+    ->name('layanan-pelanggan.index');
+Route::get('/layanan-pelanggan-pelapor/create', [CSController::class, 'createRoom'])
+    ->name('layanan-pelanggan.create');
+Route::post('/layanan-pelanggan-pelapor/continue', [CSController::class, 'continueCS'])
+    ->name('layanan-pelanggan.continue');
+Route::post('/layanan-pelanggan-pelapor/assign-category/{code}', [CSController::class, 'assignCategory'])
+    ->name('layanan-pelanggan.assign_category');
+Route::post('/layanan-pelanggan-pelapor/set-admin/{id}', [CSController::class, 'setAdminStatus'])
+    ->name('layanan-pelanggan.set_admin');
+Route::post('/layanan-pelanggan-pelapor/finish/{code}', [CSController::class, 'userFinish'])
+    ->name('layanan-pelanggan.finish');
+Route::get('/layanan-pelanggan-pelapor/ruang/{code}', [CSController::class, 'userChat'])
+    ->name('layanan-pelanggan.ruang_pesan');
 Route::post('/login-all', [LoginAllController::class, 'loginAjax'])
     ->name('login.ajax');
+Route::post('/layanan-pelanggan-pelapor/panggil-lagi/{room}', [CSController::class, 'panggilLagi']);
+Route::post('/layanan-pelanggan-pelapor/upload/{room}', [CSController::class, 'upload'])
+    ->name('layanan-pelanggan.upload');// Ambil daftar file
+Route::get('/layanan-pelanggan-pelapor/files/{room}', [CSController::class, 'listFiles'])
+    ->name('layanan-pelanggan.files');
+
+
+
+
+
 
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
 
-    Route::get('/pengaduan', [ComplaintAdminController::class, 'adminIndex'])
-        ->name('admin.pengaduan.index');
+    Route::get('/layanan-pelanggan-admin', [CSAdminController::class, 'adminIndex'])
+        ->name('admin.layanan-pelanggan.index');
 
-    Route::get('/pengaduan/ruang/{code}', [ComplaintAdminController::class, 'adminChat'])
-        ->name('admin.pengaduan.ruang_pesan');
+    Route::get('/layanan-pelanggan-admin/ruang/{code}', [CSAdminController::class, 'adminChat'])
+        ->name('admin.layanan-pelanggan.ruang_pesan');
 
-    Route::delete('/pengaduan/{code}/hapus', [ComplaintAdminController::class, 'adminDelete'])
-        ->name('admin.pengaduan.delete');
+    Route::delete('/layanan-pelanggan-admin/{code}/hapus', [CSAdminController::class, 'adminDelete'])
+        ->name('admin.layanan-pelanggan.delete');
 
-    Route::post('/pengaduan/finish/{code}', [ComplaintAdminController::class, 'adminFinish'])
-        ->name('admin.pengaduan.finish');
+    Route::get('/layanan-pelanggan-admin/riwayat', [CSAdminController::class, 'logsIndex'])
+        ->name('admin.layanan-pelanggan.riwayat');
 
-    Route::get('/pengaduan/riwayat', [ComplaintAdminController::class, 'logsIndex'])
-        ->name('admin.pengaduan.riwayat');
+    Route::delete('/layanan-pelanggan-admin/riwayat/{id}/hapus', [CSAdminController::class, 'deleteLog'])
+        ->name('admin.layanan-pelanggan.riwayat.delete');
+    Route::get('/layanan-pelanggan-admin/files/{roomId}', [CSAdminController::class, 'listFiles'])
+        ->name('admin.layanan-pelanggan.files');
+    Route::post('/layanan-pelanggan-admin/upload/{roomId}', [CSAdminController::class, 'adminUpload'])
+        ->name('admin.layanan-pelanggan.upload');
 
-    Route::delete('/pengaduan/riwayat/{id}/hapus', [ComplaintAdminController::class, 'deleteLog'])
-        ->name('admin.pengaduan.riwayat.delete');
 });

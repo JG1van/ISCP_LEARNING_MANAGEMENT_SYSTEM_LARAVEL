@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Manajemen Produk')
 @section('page_title', 'Manajemen Produk ')
@@ -68,8 +68,8 @@
                         {{-- ⚙️ Tombol Aksi --}}
                         <td>
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="{{ route('admin.produk.edit', $item->id) }}" class="btn btn-sm-1">Edit</a>
-                                <button type="button" class="btn btn-sm-2"
+                                <a href="{{ route('admin.produk.edit', $item->id) }}" class="btn btn-alt-1">Edit</a>
+                                <button type="button" class="btn btn-alt-2"
                                     onclick="hapusProduk('{{ $item->id }}', '{{ $item->name }}')">
                                     Hapus
                                 </button>

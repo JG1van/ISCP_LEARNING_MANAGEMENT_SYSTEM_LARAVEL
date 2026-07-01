@@ -10,6 +10,8 @@ use Illuminate\Database\QueryException;
 
 class MapelController extends Controller
 {
+    public const ALLOWED_ROLES = [1, 2, 4];
+
     public function __construct()
     {
         $this->middleware(['auth']);

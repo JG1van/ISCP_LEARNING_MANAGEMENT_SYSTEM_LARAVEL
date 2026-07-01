@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Profil Admin')
 @section('page_title', 'Profil Admin')
@@ -31,10 +31,18 @@
                             <div class="bg-light rounded-4 shadow-sm p-4 d-flex flex-column align-items-center justify-content-center w-100"
                                 style="min-height: auto;">
                                 <div class="position-relative mb-3">
-                                    <img id="imgPreview"
-                                        src="{{ $admin->img ? asset('images/admins/' . $admin->img) : asset('images/logo.webp') }}"
-                                        alt="Foto Admin" class="rounded-circle border shadow-sm bg-white" width="130"
-                                        height="130" style="object-fit: cover;">
+                                    @php
+                                        $editPhotoPath =
+                                            $admin->img && Storage::disk('public')->exists('admins/' . $admin->img)
+                                                ? asset('storage/admins/' . $admin->img)
+                                                : asset('images/logo.webp');
+                                    @endphp
+
+                                    <img id="imgPreview" src="{{ $editPhotoPath }}"
+                                        class="rounded-circle border shadow-sm bg-white" width="120" height="120"
+                                        style="object-fit: cover;">
+
+
                                     <button type="button"
                                         class="btn btn-sm btn-add rounded-circle position-absolute bottom-0 end-0 translate-middle"
                                         id="btnChangePhoto" style="width: 35px; height: 35px;">
@@ -57,7 +65,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="text-muted pe-2">Hak Akses:</th>
+                                        <th class="text-muted pe-2">Role:</th>
                                         <td>
                                             @switch($admin->role)
                                                 @case(1)
@@ -166,7 +174,7 @@
                 {{-- Nonaktifkan akun --}}
                 <form action="{{ route('admin.profil.destroy') }}" method="POST" class="mt-3">
                     @csrf
-                    <button type="submit" class="btn btn-sm-2 w-100">
+                    <button type="submit" class="btn btn-alt-2 w-100">
                         <i class="fas fa-user-slash me-2"></i> Nonaktifkan Akun
                     </button>
                 </form>

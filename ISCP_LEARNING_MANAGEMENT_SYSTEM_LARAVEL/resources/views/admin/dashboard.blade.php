@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Dashboard LMS')
 @section('page_title', 'Dashboard Learning Management System')
@@ -9,11 +9,10 @@
         {{-- Kartu sambutan --}}
         <div class="row mb-3 align-items-stretch g-4">
             <div class="col-md-8">
-                <div class="card p-4 d-flex flex-column flex-md-row justify-content-between align-items-center border shadow-sm text-center"
-                    style="height: 300px">
-                    <div class="d-none d-md-block px-2">
-                        <img src="{{ asset('images/ilustrasi-selamat-datang-1.png') }}" alt="Ilustrasi Kiri"
-                            style="height: 100px; max-width: 200px;">
+                <div
+                    class="card p-4 d-flex flex-column flex-md-row justify-content-between align-items-center border text-center size-card">
+                    <div class="welcome-illustration px-2">
+                        <img src="{{ asset('images/ilustrasi-selamat-datang-1.png') }}" alt="Ilustrasi Kiri">
                     </div>
                     <div class="flex-grow-1 px-3">
                         <h5 class="fw-bold mb-2">Halo, <span
@@ -22,9 +21,8 @@
                         <p class="fs-6 text-muted mb-0">Selamat datang di</p>
                         <p class="fs-6 fw-semibold text-dark mb-0">Sistem Manajemen Pembelajaran (LMS)</p>
                     </div>
-                    <div class="d-none d-md-block px-2">
-                        <img src="{{ asset('images/ilustrasi-selamat-datang-2.png') }}" alt="Ilustrasi Kanan"
-                            style="height: 100px; max-width: 200px;">
+                    <div class="welcome-illustration px-2">
+                        <img src="{{ asset('images/ilustrasi-selamat-datang-2.png') }}" alt="Ilustrasi Kanan">
                     </div>
                 </div>
             </div>
@@ -42,21 +40,21 @@
                     <div class="col-6">
                         <div class="card p-3 text-center border" style="min-height: 140px;">
                             <i class="bi bi-people text-success" style="font-size: 2rem;"></i>
-                            <h6 class="mt-2 text-truncate">Siswa Aktif</h6>
+                            <h6 class="mt-2 text-truncate">Total Siswa</h6>
                             <h4 class="fw-bold text-dark fs-5">{{ $totalSiswa }}</h4>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="card p-3 text-center border" style="min-height: 140px;">
                             <i class="bi bi-person-workspace text-info" style="font-size: 2rem;"></i>
-                            <h6 class="mt-2 text-truncate">Guru</h6>
+                            <h6 class="mt-2 text-truncate">Total Guru</h6>
                             <h4 class="fw-bold text-dark fs-5">{{ $totalGuru }}</h4>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="card p-3 text-center border" style="min-height: 140px;">
                             <i class="bi bi-journal-bookmark text-warning" style="font-size: 2rem;"></i>
-                            <h6 class="mt-2 text-truncate">Kelas Aktif</h6>
+                            <h6 class="mt-2 text-truncate">Total Kelas</h6>
                             <h4 class="fw-bold text-dark fs-5">{{ $totalKelas }}</h4>
                         </div>
                     </div>
@@ -70,7 +68,7 @@
                 <div class="card p-3 border d-flex flex-row align-items-center" style="gap: 15px;">
                     <i class="bi bi-tv text-info" style="font-size: 2rem;"></i>
                     <div>
-                        <div class="fw-semibold">Produk Pembelajaran</div>
+                        <div class="fw-semibold">Total Produk Pembelajaran</div>
                         <div class="fw-bold text-dark fs-6">{{ $totalProduk }} Modul</div>
                     </div>
                 </div>
@@ -79,7 +77,7 @@
                 <div class="card p-3 border d-flex flex-row align-items-center" style="gap: 15px;">
                     <i class="bi bi-collection text-primary" style="font-size: 2rem;"></i>
                     <div>
-                        <div class="fw-semibold">Mapel</div>
+                        <div class="fw-semibold">Total Mata Pelajaran</div>
                         <div class="fw-bold text-dark fs-6">{{ $totalMapel }} Mapel</div>
                     </div>
                 </div>
@@ -88,7 +86,7 @@
                 <div class="card p-3 border d-flex flex-row align-items-center" style="gap: 15px;">
                     <i class="bi bi-key text-success" style="font-size: 2rem;"></i>
                     <div>
-                        <div class="fw-semibold">Serial Aktif</div>
+                        <div class="fw-semibold">Total Serial</div>
                         <div class="fw-bold text-dark fs-6">{{ $totalSerial }} Kode</div>
                     </div>
                 </div>

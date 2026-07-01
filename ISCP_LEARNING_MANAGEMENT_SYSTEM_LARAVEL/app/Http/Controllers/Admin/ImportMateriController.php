@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class ImportMateriController extends Controller
 {
-    /**
-     * Halaman import file Excel untuk materi.
-     */
+    public const ALLOWED_ROLES = [1, 2, 4];
     public function index($lesson_id)
     {
         $lesson = Lesson::findOrFail($lesson_id);

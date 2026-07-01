@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Data Siswa')
 @section('page_title', 'Data Siswa')
@@ -73,9 +73,9 @@
                             <td>{{ $student->username }}</td>
                             <td>
                                 <div class="d-flex justify-content-center gap-1">
-                                    <button class="btn btn-sm-1" onclick="editStudent('{{ $student->id }}')">Detail /
+                                    <button class="btn btn-alt-1" onclick="editStudent('{{ $student->id }}')">Detail /
                                         Edit</button>
-                                    <button class="btn btn-sm-2"
+                                    <button class="btn btn-alt-2"
                                         onclick="hapusStudent('{{ $student->id }}', '{{ $student->name }}')">Hapus</button>
                                 </div>
 

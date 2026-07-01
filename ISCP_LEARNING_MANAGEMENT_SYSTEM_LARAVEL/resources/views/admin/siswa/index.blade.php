@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Manajemen Siswa')
 @section('page_title', 'Manajemen Siswa')
@@ -67,9 +67,9 @@
                         <td>{{ $student->user->name ?? '-' }}</td>
                         <td>
                             <div class="d-flex justify-content-center gap-1">
-                                <button class="btn btn-sm-1" onclick="editStudent('{{ $student->id }}')">Detail /
+                                <button class="btn btn-alt-1" onclick="editStudent('{{ $student->id }}')">Detail /
                                     Edit</button>
-                                <button class="btn btn-sm-2"
+                                <button class="btn btn-alt-2"
                                     onclick="hapusStudent('{{ $student->id }}', '{{ $student->name }}')">Hapus</button>
                             </div>
                         </td>
@@ -160,7 +160,7 @@
                         <div class="input-group">
                             <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                                 type="text" id="editPassword" class="form-control" value="********" readonly>
-                            <button type="button" class="btn btn-outline-danger" id="btnResetPassword">
+                            <button type="button" class="btn btn-alt-1" id="btnResetPassword">
                                 <i class="fas fa-undo me-1"></i>Reset
                             </button>
                         </div>

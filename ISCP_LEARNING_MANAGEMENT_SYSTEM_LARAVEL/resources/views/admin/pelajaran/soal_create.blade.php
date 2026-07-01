@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Tambah Soal')
 @section('page_title', 'Tambah Soal')
 
 @section('content')
     <div class="container-fluid">
-        <form id="formSoal" action="{{ route('admin.pelajaran.latihan_soal.soal.store', [$lesson_id, $exercise_id]) }}"
+        <form id="formSoal" action="{{ route('admin.pelajaran.judul_soal.soal.store', [$lesson_id, $exercise_id]) }}"
             method="POST">
             @csrf
             <input type="hidden" name="selection" id="selectionInput">
@@ -18,7 +18,7 @@
 
                 <div class="row g-3">
                     <div class="col-md-12">
-                        <label class="form-label fw-semibold">Tipe Latihan</label>
+                        <label class="form-label fw-semibold">Tipe Soal</label>
                         <input type="text" class="form-control " value="{{ $exerciseType->name }}" readonly>
                     </div>
 
@@ -168,7 +168,7 @@
                     <div id="editorQuestion" class="border p-2 rounded" required></div>
                     <input type="hidden" name="question" id="hiddenQuestion">
                     <label class="mt-3">Kunci Jawaban:</label>
-                    <select id="answer" name="answer" class="form-select mt-1">
+                    <select id="answer" name="answer" class="form-select mt-1 ">
                         <option>Benar</option><option>Salah</option>
                     </select>`;
                     break;
@@ -180,7 +180,7 @@
                     <div id="editorQuestion" class="border p-2 rounded" required></div>
                     <input type="hidden" name="question" id="hiddenQuestion">
                     <label class="mt-3">Kunci Jawaban:</label>
-                    <input type="text" id="answer" name="answer" class="form-control" placeholder="Isi jawaban benar" required>`;
+                    <input type="text" id="answer" name="answer" class="form-control" placeholder="Isi jawaban benar" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">`;
                     break;
                 case "5":
                     html = `
@@ -216,8 +216,8 @@
                 default:
                     html = `
                     <div class="alert alert-warning text-center p-4 rounded">
-                        <h5 class="fw-bold mb-2 text-danger">Model latihan belum dibuat</h5>
-                        <p class="mb-0">Silakan buat model latihan untuk tipe ini terlebih dahulu.</p>
+                        <h5 class="fw-bold mb-2 text-danger">Model soal belum dibuat</h5>
+                        <p class="mb-0">Silakan buat model soal untuk tipe ini terlebih dahulu.</p>
                     </div>`;
             }
 

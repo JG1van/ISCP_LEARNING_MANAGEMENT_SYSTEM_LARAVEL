@@ -10,9 +10,7 @@ use App\Models\Lesson;
 
 class CompetenceController extends Controller
 {
-    /**
-     * Tampilkan daftar KD untuk pelajaran.
-     */
+    public const ALLOWED_ROLES = [1, 2, 4];
     public function index($lesson_id)
     {
         $lesson = Lesson::with('mapel')->findOrFail($lesson_id);

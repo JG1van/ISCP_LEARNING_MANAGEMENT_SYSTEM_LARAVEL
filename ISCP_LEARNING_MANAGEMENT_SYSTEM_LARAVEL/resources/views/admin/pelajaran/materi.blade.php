@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 @section('title', 'Manajemen Materi')
 @section('page_title')
     Manajemen Materi - {{ $lesson->name }}
@@ -50,9 +50,9 @@
                                     <strong>Bab {{ $theme->theme }}:</strong> {{ $theme->name }}
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-sm-1"
+                                    <button class="btn btn-alt-1"
                                         onclick="editItem('theme', {{ $theme->id }})">Edit</button>
-                                    <button class="btn btn-sm-2"
+                                    <button class="btn btn-alt-2"
                                         onclick="deleteItem('theme', {{ $theme->id }})">Hapus</button>
                                 </div>
                             </div>
@@ -66,9 +66,9 @@
                                                 <span>Subbab {{ $sub->subtheme }}:</span> {{ $sub->name }}
                                             </div>
                                             <div class="d-flex gap-2">
-                                                <button class="btn btn-sm-1"
+                                                <button class="btn btn-alt-1"
                                                     onclick="editItem('subtheme', {{ $sub->id }})">Edit</button>
-                                                <button class="btn btn-sm-2"
+                                                <button class="btn btn-alt-2"
                                                     onclick="deleteItem('subtheme', {{ $sub->id }})">Hapus</button>
                                             </div>
                                         </div>
@@ -96,16 +96,16 @@
                                                         <div class="d-flex gap-2">
 
                                                             <!-- TOMBOL PREVIEW -->
-                                                            <button class="btn btn-sm btn-primary"
+                                                            <button class="btn btn-add"
                                                                 onclick="previewVideo('{{ base64_encode($item->embed) }}')">
                                                                 Video
                                                             </button>
 
 
-                                                            <button class="btn btn-sm-1"
+                                                            <button class="btn btn-alt-1"
                                                                 onclick="editItem('item', {{ $item->id }})">Edit</button>
 
-                                                            <button class="btn btn-sm-2"
+                                                            <button class="btn btn-alt-2"
                                                                 onclick="deleteItem('item', {{ $item->id }})">Hapus</button>
                                                         </div>
 
@@ -163,7 +163,7 @@
                                             <i class="bi bi-upload"></i> Upload & Import
                                         </button>
                                         <a href="{{ asset('template/template_import_materi.xlsx') }}"
-                                            class="btn btn-sm-1">
+                                            class="btn btn-alt-1">
                                             <i class="bi bi-download"></i> Download Template
                                         </a>
                                     </div>
@@ -180,8 +180,8 @@
 
                 <div class="btn-group w-100 mb-3">
                     <button class="btn btn-add" onclick="showForm('theme','add')">+ Bab</button>
-                    <button class="btn btn-sm-2" onclick="showForm('subtheme','add')">+ Subbab</button>
-                    <button class="btn btn-sm-1" onclick="showForm('item','add')">+ Materi</button>
+                    <button class="btn btn-alt-1" onclick="showForm('subtheme','add')">+ Subbab</button>
+                    <button class="btn btn-alt-2" onclick="showForm('item','add')">+ Materi</button>
                 </div>
 
                 <form id="formData">@csrf

@@ -131,7 +131,7 @@ class LoginAllController extends Controller
             session(['role' => 'guru']);
 
             if ($roomCode) {
-                \App\Models\ComplaintRoom::where('complaint_code', $roomCode)
+                \App\Models\CSRoom::where('room_code', $roomCode)
                     ->update([
                         'user_id' => $guru->id,
                         'student_id' => null,
@@ -155,7 +155,7 @@ class LoginAllController extends Controller
             session(['role' => 'siswa']);
 
             if ($roomCode) {
-                \App\Models\ComplaintRoom::where('complaint_code', $roomCode)
+                \App\Models\CSRoom::where('room_code', $roomCode)
                     ->update([
                         'student_id' => $student->id,
                         'user_id' => null,

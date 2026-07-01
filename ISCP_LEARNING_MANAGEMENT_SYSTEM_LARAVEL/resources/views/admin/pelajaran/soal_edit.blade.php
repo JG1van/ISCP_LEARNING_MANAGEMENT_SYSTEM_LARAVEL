@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Edit Soal ')
 @section('page_title', 'Edit Soal ')
@@ -6,7 +6,7 @@
 @section('content')
     <div class="container-fluid">
         <form id="formSoal"
-            action="{{ route('admin.pelajaran.latihan_soal.soal.update', [$lesson->id, $exercise->id, $item->id]) }}"
+            action="{{ route('admin.pelajaran.judul_soal.soal.update', [$lesson->id, $exercise->id, $item->id]) }}"
             method="POST">
             @csrf
             @method('PUT')
@@ -18,7 +18,7 @@
                 <h5 class="fw-bold mb-3 text-uppercase">Informasi Soal</h5>
                 <div class="row g-3">
                     <div class="col-md-12">
-                        <label class="form-label fw-semibold">Tipe Latihan</label>
+                        <label class="form-label fw-semibold">Tipe Soal</label>
                         <input type="text" class="form-control" value="{{ $exerciseType->name }}" readonly>
                     </div>
 
@@ -184,12 +184,13 @@
 
                 // --- MODEL ISIAN ---
             } else if (model == 4) {
-                area.innerHTML = `
+                area.innerHTML =
+                    `
             <label>Pertanyaan:</label>
             <div id="editorQuestion" class="border p-2 rounded"></div>
             <input type="hidden" name="question" id="hiddenQuestion">
             <label class="mt-3">Jawaban:</label>
-            <input type="text" name="answer" value="${answer ?? ''}" class="form-control" required>`;
+            <input type="text" name="answer" value="${answer ?? ''}" class="form-control" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">`;
                 createEditor("editorQuestion", question);
 
                 // --- MODEL URAIAN / ARGUMEN ---

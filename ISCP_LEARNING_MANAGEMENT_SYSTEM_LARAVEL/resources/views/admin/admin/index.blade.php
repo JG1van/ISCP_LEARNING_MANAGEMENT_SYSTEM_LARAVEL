@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Manajemen Admin')
 @section('page_title', 'Manajemen Admin')
@@ -71,11 +71,11 @@
                         <td>
                             <div class="d-flex justify-content-center gap-1">
                                 @if (auth()->user()->id !== $admin->id)
-                                    <button class="btn btn-sm-1" onclick="editAdmin('{{ $admin->id }}')">Edit</button>
-                                    <button class="btn btn-sm-2"
+                                    <button class="btn btn-alt-1" onclick="editAdmin('{{ $admin->id }}')">Edit</button>
+                                    <button class="btn btn-alt-2"
                                         onclick="hapusAdmin('{{ $admin->id }}', '{{ $admin->name }}')">Hapus</button>
                                 @else
-                                    <span class="text-muted small fst-italic">Akun sendiri</span>
+                                    <span class="text-muted small fst-italic">Akun Anda</span>
                                 @endif
                             </div>
                         </td>
@@ -87,6 +87,11 @@
                         </tr>
                     @endforelse
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="5"></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
@@ -160,7 +165,14 @@
                                 <div class="bg-light rounded-4 shadow-sm p-4 d-flex flex-column align-items-center justify-content-center"
                                     style="min-height: 250px;">
                                     <div class="position-relative">
-                                        <img id="editImgPreview" src="{{ asset('images/logo.webp') }}" alt="Foto Admin"
+                                        @php
+                                            $editPhotoPath =
+                                                $admin->img && Storage::disk('public')->exists('admins/' . $admin->img)
+                                                    ? asset('storage/admins/' . $admin->img)
+                                                    : asset('images/logo.webp');
+                                        @endphp
+
+                                        <img id="editImgPreview" src="{{ $editPhotoPath }}"
                                             class="rounded-circle border shadow-sm bg-white" width="120" height="120"
                                             style="object-fit: cover;">
                                         <button type="button"
@@ -169,6 +181,7 @@
                                             <i class="fas fa-pen"></i>
                                         </button>
                                     </div>
+
                                     <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                                         type="file" id="editImgInput" name="photo" accept="image/*" hidden>
                                     <h6 class="fw-bold mb-0 mt-3" id="editNameCard">Nama Admin</h6>
@@ -422,7 +435,7 @@
                             document.getElementById("editNameCard").innerText = a.name ?? "Tanpa Nama";
 
                             const imgPreview = document.getElementById("editImgPreview");
-                            imgPreview.src = a.img ? `/images/admins/${a.img}` : `/images/logo.webp`;
+                            imgPreview.src = a.img ? `/storage/admins/${a.img}` : `/images/logo.webp`;
 
                             new bootstrap.Modal(document.getElementById("modalEdit")).show();
                         } else {

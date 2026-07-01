@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Manajemen Pelajaran')
 @section('page_title', 'Manajemen Pelajaran')
@@ -42,9 +42,9 @@
                         <td>{{ $item->semester == 1 ? 'Semester 1 (Ganjil)' : 'Semester 2 (Genap)' }}</td>
                         <td>
                             @if ($item->category == 1)
-                                Teori Pelajaran
+                                Teori
                             @elseif ($item->category == 2)
-                                Latihan Soal
+                                Soal
                             @else
                                 <span class="text-muted">Tidak Diketahui</span>
                             @endif
@@ -54,8 +54,8 @@
                                 <button class="btn btn-add" onclick="openSelectModal('{{ $item->id }}')">
                                     Pilih
                                 </button>
-                                <button class="btn btn-sm-1" onclick="editLesson('{{ $item->id }}')">Edit</button>
-                                <button class="btn btn-sm-2"
+                                <button class="btn btn-alt-1" onclick="editLesson('{{ $item->id }}')">Edit</button>
+                                <button class="btn btn-alt-2"
                                     onclick="hapusLesson('{{ $item->id }}', '{{ $item->name }}')">Hapus</button>
                             </div>
 
@@ -84,8 +84,8 @@
                 </div>
                 <div class="modal-body text-center">
                     <button id="btnMateri" class="btn btn-add w-100 mb-2">Materi Pelajaran</button>
-                    <button id="btnKD" class="btn btn-sm-1 w-100 mb-2">Kompetensi Dasar</button>
-                    <button id="btnSoal" class="btn btn-sm-2 w-100">Latihan Soal</button>
+                    <button id="btnKD" class="btn btn-alt-1 w-100 mb-2">Kompetensi Dasar</button>
+                    <button id="btnSoal" class="btn btn-alt-2 w-100">Soal</button>
                 </div>
             </div>
         </div>
@@ -136,8 +136,8 @@
                         <label class="form-label">Kategori</label>
                         <select name="category" class="form-select" required>
                             <option value="">== Pilih ==</option>
-                            <option value="1">Teori Pelajaran</option>
-                            <option value="2">Latihan Soal</option>
+                            <option value="1">Teori </option>
+                            <option value="2">Soal </option>
                         </select>
                     </div>
                 </div>
@@ -193,8 +193,8 @@
                     <div class="col-md-4">
                         <label class="form-label">Kategori</label>
                         <select id="editCategory" name="category" class="form-select" required>
-                            <option value="1">Teori Pelajaran</option>
-                            <option value="2">Latihan Soal</option>
+                            <option value="1">Teori </option>
+                            <option value="2">Soal </option>
                         </select>
                     </div>
                 </div>
@@ -243,7 +243,7 @@
         });
 
         document.getElementById("btnSoal").addEventListener("click", () => {
-            window.location.href = `/admin/pelajaran/${selectedLessonId}/latihan_soal`;
+            window.location.href = `/admin/pelajaran/${selectedLessonId}/judul_soal`;
         });
 
         document.addEventListener("DOMContentLoaded", () => {

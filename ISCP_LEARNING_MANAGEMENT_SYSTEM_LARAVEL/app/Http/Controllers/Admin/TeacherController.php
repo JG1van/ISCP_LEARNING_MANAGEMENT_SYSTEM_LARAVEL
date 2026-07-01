@@ -10,18 +10,16 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 
-use Illuminate\Support\Facades\File;
-
-
 class TeacherController extends Controller
 {
+    public const ALLOWED_ROLES = [1, 2, 3];
     public function __construct()
     {
         $this->middleware(['auth']);
     }
 
     /**
-     *   Tampilkan daftar guru
+     *  Tampilkan daftar guru
      */
     public function index(Request $request)
     {
@@ -35,7 +33,7 @@ class TeacherController extends Controller
     }
 
     /**
-     *   Simpan data guru baru (password default otomatis)
+     *  Simpan guru baru (password default otomatis)
      */
     public function store(Request $request)
     {
@@ -45,7 +43,7 @@ class TeacherController extends Controller
             'email' => 'nullable|email|max:100',
             'address' => 'nullable|string',
             'phone' => 'nullable|string|max:20',
-            'img' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'img' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ], [
             'name.required' => 'Nama wajib diisi.',
             'username.required' => 'Username wajib diisi.',
@@ -60,21 +58,21 @@ class TeacherController extends Controller
         }
 
         try {
+            // Upload foto jika ada
             $imgPath = null;
             if ($request->hasFile('img')) {
-                $imgPath = $request->file('img')->store('public/guru');
-                $imgPath = str_replace('public/', '', $imgPath);
+                $imgPath = $request->file('img')->store('users', 'public');
             }
 
             $teacher = User::create([
                 'name' => $request->name,
                 'username' => $request->username,
-                'password' => Hash::make('Guru1234'), //   default password
+                'password' => Hash::make('Guru1234'),
                 'role' => 1, // Guru
                 'email' => $request->email,
                 'address' => $request->address,
                 'phone' => $request->phone,
-                'img' => $imgPath,
+                'img' => $imgPath ? basename($imgPath) : null,
             ]);
 
             return response()->json([
@@ -91,7 +89,7 @@ class TeacherController extends Controller
     }
 
     /**
-     *   Ambil data guru berdasarkan ID
+     *  Ambil data guru berdasarkan ID
      */
     public function edit($id)
     {
@@ -111,23 +109,38 @@ class TeacherController extends Controller
     }
 
     /**
-     *   Update data guru
+     *  Update data guru
      */
     public function update(Request $request, $id)
     {
         $teacher = User::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'username' => 'required|string|max:100|unique:users,username,' . $id,
-            'email' => 'nullable|email',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string',
-            'role' => 'required|in:0,1',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|string|max:100',
+                'username' => 'required|string|max:100|unique:users,username,' . $id,
+                'email' => 'nullable|email|max:100',
+                'phone' => 'nullable|string|max:20',
+                'address' => 'nullable|string',
+                'role' => 'required|in:0,1',
+                'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            ],
+            [
+                'name.required' => 'Nama wajib diisi.',
+                'username.required' => 'Username wajib diisi.',
+                'username.unique' => 'Username sudah digunakan, silakan pilih yang lain.',
+            ]
+        );
 
-        //   Update data dasar
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+
+        // Update data
         $teacher->update([
             'name' => $request->name,
             'username' => $request->username,
@@ -137,31 +150,23 @@ class TeacherController extends Controller
             'role' => $request->role,
         ]);
 
-        //   Upload foto baru jika ada
+        // Upload foto jika ada
         if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada
-            if ($teacher->img && file_exists(public_path('images/users/' . $teacher->img))) {
-                unlink(public_path('images/users/' . $teacher->img));
+            // Hapus foto lama
+            if ($teacher->img && Storage::disk('public')->exists('users/' . $teacher->img)) {
+                Storage::disk('public')->delete('users/' . $teacher->img);
             }
 
-            // Buat nama file baru berbasis username
-            $extension = $request->file('photo')->getClientOriginalExtension();
-            $filename = 'foto-' . $request->username . '.' . $extension;
-
-            // Simpan ke folder public/images/users
-            $request->file('photo')->move(public_path('images/users'), $filename);
-
-            // Simpan ke database
-            $teacher->img = $filename;
+            $path = $request->file('photo')->store('users', 'public');
+            $teacher->img = basename($path);
             $teacher->save();
         }
 
         return response()->json(['success' => true, 'message' => 'Data guru berhasil diperbarui.']);
     }
 
-
     /**
-     *   Hapus guru
+     *  Hapus guru
      */
     public function destroy($id)
     {
@@ -174,20 +179,21 @@ class TeacherController extends Controller
             ], 404);
         }
 
-        //   Cek apakah guru masih digunakan di tabel lain
+        // Daftar relasi (format PATOKAN)
+        $relations = [
+            ['model' => \App\Models\Student::class, 'column' => 'user_id', 'label' => 'siswa'],
+            ['model' => \App\Models\Serial::class, 'column' => 'user_id', 'label' => 'serial'],
+            ['model' => \App\Models\ExerciseItem::class, 'column' => 'user_id', 'label' => 'soal'],
+        ];
+
         $relatedData = [];
 
-        if (\App\Models\Student::where('user_id', $id)->exists()) {
-            $relatedData[] = 'Siswa';
-        }
-        if (\App\Models\Serial::where('user_id', $id)->exists()) {
-            $relatedData[] = 'serial';
-        }
-        if (\App\Models\ExerciseItem::where('user_id', $id)->exists()) {
-            $relatedData[] = 'exercise_items';
+        foreach ($relations as $relation) {
+            if ($relation['model']::where($relation['column'], $id)->exists()) {
+                $relatedData[] = $relation['label'];
+            }
         }
 
-        // Jika masih ada relasi aktif, tolak penghapusan
         if (!empty($relatedData)) {
             $list = implode(', ', $relatedData);
             return response()->json([
@@ -197,15 +203,11 @@ class TeacherController extends Controller
         }
 
         try {
-            //   Hapus foto jika ada dan filenya eksis di public/images/users
-            if ($teacher->img) {
-                $imagePath = public_path('images/users/' . $teacher->img);
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
-                }
+            // Hapus foto
+            if ($teacher->img && Storage::disk('public')->exists('users/' . $teacher->img)) {
+                Storage::disk('public')->delete('users/' . $teacher->img);
             }
 
-            //   Hapus guru dari database
             $teacher->delete();
 
             return response()->json([
@@ -213,7 +215,6 @@ class TeacherController extends Controller
                 'message' => 'Guru berhasil dihapus.',
             ]);
         } catch (QueryException $e) {
-            //   Tangani error foreign key langsung dari database
             if ($e->getCode() === '23000') {
                 return response()->json([
                     'success' => false,
@@ -228,36 +229,33 @@ class TeacherController extends Controller
         }
     }
 
-
     /**
-     *   Reset Password Guru
+     *  Reset password guru
      */
     public function resetPassword($id)
     {
         try {
-            $user = User::find($id);
+            $teacher = User::find($id);
 
-            if (!$user) {
+            if (!$teacher) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Data guru tidak ditemukan.'
+                    'message' => 'Data guru tidak ditemukan.',
                 ]);
             }
 
-            // Password default baru
-            $user->password = bcrypt('Guru1234');
-            $user->save();
+            $teacher->password = bcrypt('Guru1234');
+            $teacher->save();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Password berhasil direset menjadi: Guru1234'
+                'message' => 'Password berhasil direset menjadi: Guru1234',
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal mereset password. ' . $e->getMessage()
+                'message' => 'Gagal mereset password. ' . $e->getMessage(),
             ]);
         }
     }
-
 }

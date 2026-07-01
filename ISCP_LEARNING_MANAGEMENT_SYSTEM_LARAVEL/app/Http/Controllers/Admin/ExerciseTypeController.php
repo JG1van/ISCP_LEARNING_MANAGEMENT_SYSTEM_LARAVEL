@@ -9,16 +9,14 @@ use App\Models\ExerciseType;
 
 class ExerciseTypeController extends Controller
 {
-    /**
-     * Middleware untuk autentikasi admin.
-     */
+    public const ALLOWED_ROLES = [1, 2, 4];
     public function __construct()
     {
         $this->middleware(['auth']);
     }
 
     /**
-     * Tampilkan daftar tipe latihan.
+     * Tampilkan daftar tipe soal.
      */
     public function index(Request $request)
     {
@@ -29,7 +27,7 @@ class ExerciseTypeController extends Controller
 
         $data = ExerciseType::orderBy('id', 'asc')->get();
 
-        return view('admin.pra_latihan.tipe', compact('data'));
+        return view('admin.pra-soal.tipe', compact('data'));
     }
 
     /**
@@ -47,8 +45,8 @@ class ExerciseTypeController extends Controller
                 [
                     'kode.required' => 'Kode wajib diisi.',
                     'kode.unique' => 'Kode sudah digunakan, silakan pilih kode lain.',
-                    'name.required' => 'Nama tipe latihan wajib diisi.',
-                    'name.unique' => 'Nama tipe latihan sudah digunakan, silakan pilih nama lain.',
+                    'name.required' => 'Nama tipe soal wajib diisi.',
+                    'name.unique' => 'Nama tipe soal sudah digunakan, silakan pilih nama lain.',
                 ]
             );
 
@@ -69,19 +67,19 @@ class ExerciseTypeController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Tipe latihan berhasil ditambahkan.',
+                'message' => 'Tipe soal berhasil ditambahkan.',
                 'data' => $type,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menambahkan tipe latihan: ' . $e->getMessage(),
+                'message' => 'Gagal menambahkan tipe soal: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Ambil data tipe latihan berdasarkan ID.
+     * Ambil data tipe soal berdasarkan ID.
      */
     public function edit($id)
     {
@@ -90,7 +88,7 @@ class ExerciseTypeController extends Controller
         if (!$type) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tipe latihan tidak ditemukan.',
+                'message' => 'Tipe soal tidak ditemukan.',
             ], 404);
         }
 
@@ -101,7 +99,7 @@ class ExerciseTypeController extends Controller
     }
 
     /**
-     * Update data tipe latihan berdasarkan ID.
+     * Update data tipe soal berdasarkan ID.
      */
     public function update(Request $request, $id)
     {
@@ -110,7 +108,7 @@ class ExerciseTypeController extends Controller
         if (!$type) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tipe latihan tidak ditemukan.',
+                'message' => 'Tipe soal tidak ditemukan.',
             ], 404);
         }
 
@@ -140,19 +138,19 @@ class ExerciseTypeController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Tipe latihan berhasil diperbarui.',
+                'message' => 'Tipe soal berhasil diperbarui.',
                 'data' => $type,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal memperbarui tipe latihan: ' . $e->getMessage(),
+                'message' => 'Gagal memperbarui tipe soal: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Hapus data tipe latihan.
+     * Hapus data tipe soal.
      */
     public function destroy($id)
     {
@@ -161,7 +159,7 @@ class ExerciseTypeController extends Controller
         if (!$type) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tipe latihan tidak ditemukan.',
+                'message' => 'Tipe soal tidak ditemukan.',
             ], 404);
         }
 
@@ -178,7 +176,7 @@ class ExerciseTypeController extends Controller
         if (!empty($relatedData)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Tipe latihan tidak dapat dihapus karena masih digunakan di: ' . implode(', ', $relatedData),
+                'message' => 'Tipe soal tidak dapat dihapus karena masih digunakan di: ' . implode(', ', $relatedData),
             ], 409);
         }
 
@@ -188,12 +186,12 @@ class ExerciseTypeController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Tipe latihan berhasil dihapus.',
+                'message' => 'Tipe soal berhasil dihapus.',
             ]);
         } catch (QueryException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menghapus tipe latihan: ' . $e->getMessage(),
+                'message' => 'Gagal menghapus tipe soal: ' . $e->getMessage(),
             ], 500);
         }
     }

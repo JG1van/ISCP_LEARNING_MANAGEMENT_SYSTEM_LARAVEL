@@ -1,0 +1,490 @@
+   <svg
+                    viewBox="0 0 400 600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="mailbox-svg"
+                >
+                    <!-- Definisi gradien dan filter untuk efek realistis -->
+                    <defs>
+                        <!-- Gradien logam merah tua -->
+                        <linearGradient
+                            id="metalRed"
+                            x1="0%"
+                            y1="0%"
+                            x2="100%"
+                            y2="100%"
+                        >
+                            <stop
+                                offset="0%"
+                                style="stop-color: #7a1a1a; stop-opacity: 1"
+                            />
+                            <stop
+                                offset="30%"
+                                style="stop-color: #5c0f0f; stop-opacity: 1"
+                            />
+                            <stop
+                                offset="70%"
+                                style="stop-color: #8b1a1a; stop-opacity: 1"
+                            />
+                            <stop
+                                offset="100%"
+                                style="stop-color: #6b1515; stop-opacity: 1"
+                            />
+                        </linearGradient>
+
+                        <!-- Gradien emas untuk ornamen -->
+                        <radialGradient
+                            id="goldOrnament"
+                            cx="50%"
+                            cy="50%"
+                            r="50%"
+                        >
+                            <stop
+                                offset="0%"
+                                style="stop-color: #fff8dc; stop-opacity: 1"
+                            />
+                            <stop
+                                offset="40%"
+                                style="stop-color: #ffd700; stop-opacity: 1"
+                            />
+                            <stop
+                                offset="70%"
+                                style="stop-color: #daa520; stop-opacity: 1"
+                            />
+                            <stop
+                                offset="100%"
+                                style="stop-color: #b8860b; stop-opacity: 1"
+                            />
+                        </radialGradient>
+
+                        <!-- Gradien batu bata -->
+                        <linearGradient
+                            id="brickTexture"
+                            x1="0%"
+                            y1="0%"
+                            x2="0%"
+                            y2="100%"
+                        >
+                            <stop
+                                offset="0%"
+                                style="stop-color: #8b3a3a; stop-opacity: 1"
+                            />
+                            <stop
+                                offset="50%"
+                                style="stop-color: #722f2f; stop-opacity: 1"
+                            />
+                            <stop
+                                offset="100%"
+                                style="stop-color: #5c2424; stop-opacity: 1"
+                            />
+                        </linearGradient>
+
+                        <!-- Gradien batu dasar -->
+                        <linearGradient
+                            id="stoneTexture"
+                            x1="0%"
+                            y1="0%"
+                            x2="100%"
+                            y2="100%"
+                        >
+                            <stop
+                                offset="0%"
+                                style="stop-color: #8b8680; stop-opacity: 1"
+                            />
+                            <stop
+                                offset="50%"
+                                style="stop-color: #6b6660; stop-opacity: 1"
+                            />
+                            <stop
+                                offset="100%"
+                                style="stop-color: #4b4640; stop-opacity: 1"
+                            />
+                        </linearGradient>
+
+                        <!-- Shadow effect yang lebih realistis -->
+                        <filter
+                            id="deepShadow"
+                            x="-50%"
+                            y="-50%"
+                            width="200%"
+                            height="200%"
+                        >
+                            <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+                            <feOffset dx="3" dy="4" result="offsetblur" />
+                            <feComponentTransfer>
+                                <feFuncA type="linear" slope="0.6" />
+                            </feComponentTransfer>
+                            <feMerge>
+                                <feMergeNode />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+
+                        <!-- Emboss effect untuk tekstur logam -->
+                        <filter id="metalEmboss">
+                            <feGaussianBlur
+                                in="SourceAlpha"
+                                stdDeviation="1"
+                                result="blur"
+                            />
+                            <feSpecularLighting
+                                in="blur"
+                                surfaceScale="3"
+                                specularConstant="0.8"
+                                specularExponent="20"
+                                lighting-color="white"
+                                result="specOut"
+                            >
+                                <fePointLight x="-100" y="-100" z="200" />
+                            </feSpecularLighting>
+                            <feComposite
+                                in="specOut"
+                                in2="SourceAlpha"
+                                operator="in"
+                                result="specOut"
+                            />
+                            <feComposite
+                                in="SourceGraphic"
+                                in2="specOut"
+                                operator="arithmetic"
+                                k1="0"
+                                k2="1"
+                                k3="1"
+                                k4="0"
+                            />
+                        </filter>
+                    </defs>
+
+                    <!-- Pondasi batu yang realistis -->
+                    <g id="foundation">
+                        <!-- Batu besar dengan tekstur -->
+                        <rect
+                            x="100"
+                            y="520"
+                            width="70"
+                            height="35"
+                            fill="url(#stoneTexture)"
+                            stroke="#3a3a35"
+                            stroke-width="1.5"
+                            rx="2"
+                            filter="url(#deepShadow)"
+                        />
+                        <rect
+                            x="175"
+                            y="520"
+                            width="50"
+                            height="35"
+                            fill="url(#stoneTexture)"
+                            stroke="#3a3a35"
+                            stroke-width="1.5"
+                            rx="2"
+                            filter="url(#deepShadow)"
+                        />
+                        <rect
+                            x="230"
+                            y="520"
+                            width="70"
+                            height="35"
+                            fill="url(#stoneTexture)"
+                            stroke="#3a3a35"
+                            stroke-width="1.5"
+                            rx="2"
+                            filter="url(#deepShadow)"
+                        />
+
+                        <rect
+                            x="90"
+                            y="560"
+                            width="60"
+                            height="30"
+                            fill="url(#stoneTexture)"
+                            stroke="#3a3a35"
+                            stroke-width="1.5"
+                            rx="2"
+                            filter="url(#deepShadow)"
+                        />
+                        <rect
+                            x="155"
+                            y="560"
+                            width="55"
+                            height="30"
+                            fill="url(#stoneTexture)"
+                            stroke="#3a3a35"
+                            stroke-width="1.5"
+                            rx="2"
+                            filter="url(#deepShadow)"
+                        />
+                        <rect
+                            x="215"
+                            y="560"
+                            width="50"
+                            height="30"
+                            fill="url(#stoneTexture)"
+                            stroke="#3a3a35"
+                            stroke-width="1.5"
+                            rx="2"
+                            filter="url(#deepShadow)"
+                        />
+                        <rect
+                            x="270"
+                            y="560"
+                            width="60"
+                            height="30"
+                            fill="url(#stoneTexture)"
+                            stroke="#3a3a35"
+                            stroke-width="1.5"
+                            rx="2"
+                            filter="url(#deepShadow)"
+                        />
+
+                        <!-- Detail retakan batu -->
+                        <path
+                            d="M 135 525 L 138 550"
+                            stroke="#2a2a25"
+                            stroke-width="0.8"
+                            opacity="0.6"
+                        />
+                        <path
+                            d="M 200 525 L 198 550"
+                            stroke="#2a2a25"
+                            stroke-width="0.8"
+                            opacity="0.6"
+                        />
+                        <path
+                            d="M 265 525 L 268 550"
+                            stroke="#2a2a25"
+                            stroke-width="0.8"
+                            opacity="0.6"
+                        />
+                    </g>
+
+                    <!-- Bagian dasar kotak surat dengan ukiran -->
+                    <g id="base">
+                        <rect
+                            x="130"
+                            y="450"
+                            width="140"
+                            height="70"
+                            fill="url(#metalRed)"
+                            stroke="#4a0f0f"
+                            stroke-width="2.5"
+                            filter="url(#metalEmboss)"
+                        />
+
+                        <!-- Border emas -->
+                        <rect
+                            x="135"
+                            y="455"
+                            width="130"
+                            height="60"
+                            fill="none"
+                            stroke="url(#goldOrnament)"
+                            stroke-width="2"
+                        />
+
+                        <!-- Ukiran dekoratif -->
+                        <path
+                            d="M 150 480 Q 170 475 190 480 Q 210 485 230 480 Q 250 475 250 480"
+                            fill="none"
+                            stroke="url(#goldOrnament)"
+                            stroke-width="2.5"
+                            filter="url(#deepShadow)"
+                        />
+                        <path
+                            d="M 150 495 Q 170 490 190 495 Q 210 500 230 495 Q 250 490 250 495"
+                            fill="none"
+                            stroke="url(#goldOrnament)"
+                            stroke-width="2.5"
+                            filter="url(#deepShadow)"
+                        />
+
+                        <!-- Ornamen sudut -->
+                        <circle
+                            cx="140"
+                            cy="460"
+                            r="4"
+                            fill="url(#goldOrnament)"
+                            filter="url(#deepShadow)"
+                        />
+                        <circle
+                            cx="260"
+                            cy="460"
+                            r="4"
+                            fill="url(#goldOrnament)"
+                            filter="url(#deepShadow)"
+                        />
+                        <circle
+                            cx="140"
+                            cy="510"
+                            r="4"
+                            fill="url(#goldOrnament)"
+                            filter="url(#deepShadow)"
+                        />
+                        <circle
+                            cx="260"
+                            cy="510"
+                            r="4"
+                            fill="url(#goldOrnament)"
+                            filter="url(#deepShadow)"
+                        />
+                    </g>
+
+                    <!-- Badan kotak surat utama -->
+                    <g id="body">
+                        <rect
+                            x="140"
+                            y="200"
+                            width="120"
+                            height="250"
+                            fill="url(#metalRed)"
+                            stroke="#4a0f0f"
+                            stroke-width="3"
+                            filter="url(#metalEmboss)"
+                        />
+
+                        <!-- Panel dekoratif dengan efek emboss -->
+                        <rect
+                            x="148"
+                            y="208"
+                            width="104"
+                            height="234"
+                            fill="none"
+                            stroke="url(#goldOrnament)"
+                            stroke-width="1.5"
+                            opacity="0.5"
+                        />
+
+                        <!-- Tekstur logam vertikal -->
+                        <line
+                            x1="160"
+                            y1="210"
+                            x2="160"
+                            y2="440"
+                            stroke="#4a0f0f"
+                            stroke-width="0.5"
+                            opacity="0.3"
+                        />
+                        <line
+                            x1="180"
+                            y1="210"
+                            x2="180"
+                            y2="440"
+                            stroke="#4a0f0f"
+                            stroke-width="0.5"
+                            opacity="0.3"
+                        />
+                        <line
+                            x1="200"
+                            y1="210"
+                            x2="200"
+                            y2="440"
+                            stroke="#4a0f0f"
+                            stroke-width="0.5"
+                            opacity="0.3"
+                        />
+                        <line
+                            x1="220"
+                            y1="210"
+                            x2="220"
+                            y2="440"
+                            stroke="#4a0f0f"
+                            stroke-width="0.5"
+                            opacity="0.3"
+                        />
+                        <line
+                            x1="240"
+                            y1="210"
+                            x2="240"
+                            y2="440"
+                            stroke="#4a0f0f"
+                            stroke-width="0.5"
+                            opacity="0.3"
+                        />
+                    </g>
+
+                    <!-- Slot surat dengan bingkai ukiran emas -->
+                    <g id="mail-slot">
+                        <!-- Bingkai ornamen luar yang detail -->
+                        <rect
+                            x="150"
+                            y="215"
+                            width="100"
+                            height="30"
+                            rx="3"
+                            fill="url(#goldOrnament)"
+                            filter="url(#deepShadow)"
+                        />
+
+                        <!-- Ukiran dekoratif di bingkai -->
+                        <path
+                            d="M 155 218 Q 160 216 165 218 M 180 218 Q 200 216 220 218 M 235 218 Q 240 216 245 218"
+                            stroke="#4a0f0f"
+                            stroke-width="1.5"
+                            fill="none"
+                        />
+                        <path
+                            d="M 155 242 Q 160 244 165 242 M 180 242 Q 200 244 220 242 M 235 242 Q 240 244 245 242"
+                            stroke="#4a0f0f"
+                            stroke-width="1.5"
+                            fill="none"
+                        />
+
+                        <!-- Ornamen samping -->
+                        <circle cx="153" cy="230" r="3" fill="#4a0f0f" />
+                        <circle cx="247" cy="230" r="3" fill="#4a0f0f" />
+
+                        <!-- Slot surat -->
+                        <rect
+                            x="160"
+                            y="223"
+                            width="80"
+                            height="14"
+                            rx="1"
+                            fill="#1a0a08"
+                            stroke="#0a0504"
+                            stroke-width="1.5"
+                        />
+                        <rect
+                            x="162"
+                            y="225"
+                            width="76"
+                            height="10"
+                            fill="#0a0504"
+                        />
+
+                        <!-- Highlight pada slot -->
+                        <rect
+                            x="162"
+                            y="225"
+                            width="76"
+                            height="2"
+                            fill="#2a1a18"
+                            opacity="0.5"
+                        />
+                    </g>
+
+                    <!-- Atap runcing bergaya batu bata -->
+                    <g id="roof">
+                        <!-- Bentuk atap utama -->
+                        <path
+                            d="M 200 80 L 130 200 L 270 200 Z"
+                            fill="url(#brickTexture)"
+                            stroke="#3a1a1a"
+                            stroke-width="3"
+                            filter="url(#deepShadow)"
+                        />
+
+                        <!-- Garis tepi atap dengan shadow -->
+                        <path
+                            d="M 200 80 L 130 200"
+                            stroke="#2a1010"
+                            stroke-width="2.5"
+                            fill="none"
+                        />
+                        <path
+                            d="M 200 80 L 270 200"
+                            stroke="#2a1010"
+                            stroke-width="2.5"
+                            fill="none"
+                        />
+                    </g>
+                </svg>

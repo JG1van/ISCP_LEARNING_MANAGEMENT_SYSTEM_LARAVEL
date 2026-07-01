@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Daftar Soal')
 @section('page_title')
@@ -37,7 +37,7 @@
 
             {{-- Tombol Tambah Soal --}}
             <div class="col-md-4 text-end">
-                <a href="{{ route('admin.pelajaran.latihan_soal.soal.create', [
+                <a href="{{ route('admin.pelajaran.judul_soal.soal.create', [
                     'lesson_id' => $lesson->id,
                     'exercise_id' => $exercise->id,
                 ]) }}"
@@ -90,21 +90,21 @@
                         @elseif ($item->user)
                             <p class="mb-0 mt-1 text-secondary small" style="font-size:10px">Dibuat oleh:
                                 {{ $item->user->username }}
-                                (User)
+                                (Guru)
                             </p>
                         @endif
                     </div>
 
                     <div class="d-flex gap-2">
-                        <a href="{{ route('admin.pelajaran.latihan_soal.soal.edit', [
+                        <a href="{{ route('admin.pelajaran.judul_soal.soal.edit', [
                             'lesson_id' => $lesson->id,
                             'exercise_id' => $exercise->id,
                             'item_id' => $item->id,
                         ]) }}"
-                            class="btn btn-sm-1">
+                            class="btn btn-alt-1">
                             Edit
                         </a>
-                        <button class="btn btn-sm-2"
+                        <button class="btn btn-alt-2"
                             onclick="hapusSoal('{{ $item->id }}', '{{ addslashes(Str::limit(strip_tags($item->question), 50)) }}')">
                             Hapus
                         </button>
@@ -141,19 +141,30 @@
                         </span>
                     @elseif (in_array($item->exercise_model_id, [3, 6]))
                         <b>Kunci Jawaban:</b>
-                        <span class="text-danger">{{ ucfirst($item->answer) }}</span>
+                        @php $ans = parseAnswer($item->answer); @endphp
+                        <span class="text-danger">{{ ucfirst($ans) }}</span>
                     @elseif ($item->exercise_model_id == 4)
+                        @php
+                            $ans = json_decode($item->answer, true);
+                            $ans_val = is_array($ans) ? $ans[0] ?? '' : $item->answer;
+                        @endphp
+
                         <b>Kunci Jawaban:</b>
-                        <span class="text-danger">{{ $item->answer }}</span>
+                        <span class="text-danger">{{ $ans_val }}</span>
                     @elseif (in_array($item->exercise_model_id, [5, 7]))
                         <p class="fw-bold mb-1">Kunci Jawaban:</p>
-                        <div class="bg-light p-2 rounded">{!! $item->answer !!}</div>
+                        @php
+                            $ans = json_decode($item->answer, true);
+                            $ans_text = is_array($ans) ? $ans[0] ?? '' : $item->answer;
+                        @endphp
+
+                        <div class="bg-light p-2 rounded">{!! $ans_text !!}</div>
                     @endif
                 </div>
             </div>
         @empty
             <div class="alert alert-light border text-center mt-4">
-                Belum ada soal yang dibuat untuk latihan ini.
+                Belum ada soal yang dibuat untuk soal ini.
             </div>
         @endforelse
     </div>
@@ -188,7 +199,7 @@
                 confirmButtonColor: "#d33",
             }).then(result => {
                 if (result.isConfirmed) {
-                    fetch(`{{ url('/admin/pelajaran/' . $lesson->id . '/latihan_soal/' . $exercise->id . '/soal') }}/${id}`, {
+                    fetch(`{{ url('/admin/pelajaran/' . $lesson->id . '/judul_soal/' . $exercise->id . '/soal') }}/${id}`, {
                             method: "DELETE",
                             headers: {
                                 "X-CSRF-TOKEN": "{{ csrf_token() }}"
@@ -207,5 +218,17 @@
                 }
             });
         }
+        @php
+            function parseAnswer($answer)
+            {
+                $ans = json_decode($answer, true);
+
+                if (is_array($ans)) {
+                    return $ans[0] ?? '';
+                }
+
+                return $answer;
+            }
+        @endphp
     </script>
 @endsection

@@ -4,10 +4,9 @@
     --warna2: #753422;
     --warna3: #B05B3B;
     --warna4: #D79771;
-    --warna6: #FFEBC9;
-
-
     --warna5: #FFF4E0;
+    --warna6: #FFEBC9;
+    --warna7: #ffd87a;
 
     /* --bs-primary: var(--warna3);
     --bs-primary-rgb: 94, 147, 108;
@@ -34,7 +33,7 @@
 
 .form-check-input {
     accent-color: var(--warna3) !important;
-    /* ubah ke warna kamu */
+
     width: 22px;
     height: 22px;
     margin: 0 8px;
@@ -49,7 +48,7 @@
 
 /* Fokus ring saat aktif (outline biru default) diganti juga */
 .form-check-input:focus {
-    box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--warna4), transparent 50%) !important;
+    box-shadow: none !important;
     border-color: var(--warna3) !important;
 }
 
@@ -101,10 +100,9 @@ footer.bg-dark {
 /* Latar belakang umum */
 body {
     background:
-        linear-gradient(rgba(255, 244, 227, 0.85),
-            rgba(255, 244, 227, 0.85)),
+        linear-gradient(rgba(255, 244, 227, 0.55),
+            rgba(255, 244, 227, 0.55)),
         var(--bg-image) center center / cover no-repeat;
-
     background-color: var(--warna6) !important;
 }
 
@@ -116,7 +114,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Times New Roman';
+    font-family: 'Times New Roman', serif;
     font-size: 17px;
     overflow-y: auto;
     scrollbar-width: none;
@@ -232,19 +230,164 @@ i,
     margin-right: 10px;
 }
 
-.bg-custom {
-    background: linear-gradient(180deg, var(--warna3), var(--warna4));
-    border-radius: 20px;
-    position: fixed;
-    left: 0;
-    width: calc(100% - 280px);
-    margin-left: 265px;
-    height: 60px;
+
+.ribbon-container {
+    pointer-events: none;
+    z-index: 1030;
+    perspective: 1200px;
+    margin-left: 120px;
+    overflow: hidden;
+}
+
+.ribbon-wrapper {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    pointer-events: auto;
+    margin: 0 20px;
+    width: 70%;
     z-index: 1000;
     display: flex;
     align-items: center;
     padding: 0 20px;
 }
+
+.ribbon-main {
+    background-color: var(--warna3);
+    color: #fff;
+    border: 1px solid var(--warna7);
+    padding: 12px 40px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 10;
+    /* Top layer */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    /* Subtle texture */
+    min-width: 100%;
+    background-size: 4px 4px;
+    margin-top: 10px;
+}
+
+.ribbon-main::before {
+    content: "";
+    position: absolute;
+    top: 2.5px;
+    left: 2.5px;
+    right: 2.5px;
+    bottom: 2.5px;
+    border: 2px solid var(--warna7);
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.ribbon-tail-left,
+.ribbon-tail-right {
+    position: fixed;
+    top: 20px;
+    height: 80%;
+    width: 100px;
+    background-color: var(--warna7);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ribbon-tail-inner::before,
+.ribbon-tail-inner::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 2px solid var(--warna7);
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.ribbon-tail-left {
+    left: 140px;
+    clip-path: polygon(0 0,
+            100% 0,
+            100% 100%,
+            0 100%,
+            25% 50%);
+
+}
+
+.ribbon-tail-right {
+    right: 130px;
+    clip-path: polygon(0 0,
+            100% 0,
+            75% 50%,
+            100% 100%,
+            0 100%);
+}
+
+.ribbon-tail-inner {
+    width: calc(100% - 6px);
+    height: calc(100% - 6px);
+    background-color: var(--warna4);
+}
+
+.ribbon-tail-left .ribbon-tail-inner {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 25% 50%);
+}
+
+.ribbon-tail-right .ribbon-tail-inner {
+    clip-path: polygon(0 0, 100% 0, 75% 50%, 100% 100%, 0 100%);
+}
+
+.ribbon-main h5 {
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.ribbon-main .btn {
+    font-size: 0.8rem;
+}
+
+.ribbon-main i {
+    font-size: 1.2rem;
+}
+
+.welcome-illustration img {
+    height: 100px;
+    max-width: 200px;
+}
+
+/* MATIKAN SEMUA EFEK HOVER UNTUK MENU DISABLED */
+.sidebar ul li.disabled-li,
+.sidebar ul li.disabled-li:hover {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    transform: none !important;
+    clip-path: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* STYLE LINK DISABLED */
+.sidebar ul li.disabled-li a.disabled-menu {
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+    color: #bdbdbd !important;
+    background: none !important;
+    transform: none !important;
+    clip-path: none !important;
+    border: none !important;
+}
+
+/* HILANGKAN PSEUDO BORDER */
+.sidebar ul li.disabled-li a.disabled-menu::before {
+    content: none !important;
+}
+
 
 .sidebar {
     position: fixed;
@@ -253,22 +396,42 @@ i,
     transform: translateY(-50%);
     width: 230px;
     height: 95%;
-    background: linear-gradient(145deg, var(--warna2), var(--warna4));
+    background: var(--warna4);
+
+    /* --- Tekstur Kayu --- */
+    background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='300'><path d='M40 0 C0 75 80 225 40 300' stroke='rgba(0,0,0,0.12)' stroke-width='3' fill='none'/><path d='M90 0 C50 75 130 225 90 300' stroke='rgba(0,0,0,0.12)' stroke-width='3' fill='none'/><path d='M140 0 C100 75 180 225 140 300' stroke='rgba(0,0,0,0.12)' stroke-width='3' fill='none'/></svg>"),
+        repeating-linear-gradient(90deg,
+            rgba(0, 0, 0, 0.06) 0px,
+            rgba(0, 0, 0, 0.06) 1px,
+            transparent 1px,
+            transparent 4px),
+        linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.35),
+            transparent,
+            rgba(0, 0, 0, 0.5));
+
+    background-size: 150px 300px, 100% 100%, 100% 100%;
+    background-repeat: repeat, repeat, no-repeat;
+
     border-radius: 20px;
-    padding: 10px 15px;
+
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     z-index: 1000;
     margin: auto;
-}
 
+    overflow: hidden;
+    border: 2px solid var(--warna7);
+
+}
 
 /* Logo */
 .sidebar .logo-container {
     text-align: center;
-    margin-bottom: 5px;
 }
 
 .sidebar .logo-container img {
@@ -286,8 +449,18 @@ i,
 }
 
 .sidebar ul li {
-    margin: 8px 0;
+    margin: 8px 10px;
+    transition: margin 0.2s ease;
+    overflow: hidden;
 }
+
+/* Hover dan Active */
+.sidebar ul li:hover,
+.sidebar ul li.active {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 
 .sidebar ul li a {
     color: #bdbdbd;
@@ -296,7 +469,7 @@ i,
     align-items: center;
     gap: 12px;
     padding: 12px 15px;
-    border-radius: 12px;
+
     transition: all 0.3s ease;
     font-weight: 500;
 }
@@ -310,10 +483,34 @@ i,
 /* Hover & Active */
 .sidebar ul li a:hover,
 .sidebar ul li.active a {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--warna3);
     color: #fff;
-    transform: translateX(40px);
-    border-radius: 50px;
+    transform: translateX(20px);
+    clip-path: polygon(0 0,
+            100% 0,
+            100% 100%,
+            0 100%,
+            20% 50%);
+    border: 2px solid var(--warna7);
+}
+
+.sidebar ul li.hover i::before,
+.sidebar ul li.active i::before {
+    display: none;
+}
+
+.sidebar ul li a:hover ::before,
+.sidebar ul li.active a::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 2px solid var(--warna7);
+    opacity: 0.3;
+    pointer-events: none;
+
 }
 
 /* Footer / user info (kalau ada di bawah) */
@@ -342,12 +539,6 @@ i,
     color: #aaa;
 }
 
-/* Responsif: hilang di HP */
-@media (max-width: 768px) {
-    .sidebar {
-        display: none;
-    }
-}
 
 
 .tu-info {
@@ -374,13 +565,7 @@ i,
 
 
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
 
-}
 
 .main h1 {
     font-size: 28px;
@@ -390,8 +575,10 @@ i,
 
 main .card {
     background: var(--warna0);
-
     box-shadow: none;
+    box-shadow:
+        inset 0 0 0 1px var(--warna7);
+    padding: 10px;
     border-bottom: 10px solid var(--warna2);
     max-height: 500px;
     overflow-y: auto;
@@ -403,12 +590,10 @@ main .card {
     min-height: 290px;
 }
 
-@media (max-width: 768px) {
-    .card-custom {
-        min-height: auto !important;
-        /* agar di HP tidak terlalu tinggi */
-    }
+.size-card {
+    min-height: 300px;
 }
+
 
 
 .table-wrapper {
@@ -492,14 +677,26 @@ input.form-control,
 select.form-select,
 textarea.form-control {
     border: 4px solid var(--warna2);
+    margin-bottom: 10px;
+    box-shadow:
+        0 4px 0 rgba(0, 0, 0, 0.35),
+        0 5px 10px rgba(0, 0, 0, 0.25);
+
 }
 
 input.form-control:focus,
 select.form-select:focus,
-textarea.form-control:focus {
+textarea.form-control:focus,
+input.form-control:active,
+select.form-select:active,
+textarea.form-control:active {
     border-color: var(--warna2);
-    box-shadow: none;
     outline: none;
+    transform: translateY(2px);
+    box-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.35),
+        0 3px 5px rgba(0, 0, 0, 0.25);
+
 }
 
 input[readonly] {
@@ -552,62 +749,97 @@ input[type="file"]:active::-webkit-file-upload-button {
 
 
 .alas {
-    margin-top: 70px;
+    margin-top: 90px;
     background: linear-gradient(180deg, var(--warna5), var(--warna6));
     border-radius: 20px;
-    border: 4px solid var(--warna2);
+
+    border: 2px solid var(--warna7);
+
     padding: 10px;
 }
 
-@media (min-width: 768px) {
-    .main-content {
-        margin-left: 250px;
-    }
-}
 
+
+/* ================================
+   TOMBOL UTAMA (btn-add)
+================================ */
 main .btn-add {
+    margin-bottom: 10px;
     background-color: var(--warna2);
     border: 4px solid var(--warna2);
     color: var(--warna0);
+
+    /* efek baru */
+    box-shadow:
+        0 4px 0 rgba(0, 0, 0, 0.35),
+        0 5px 10px rgba(0, 0, 0, 0.25);
+
+    transition: all 0.25s ease;
     cursor: pointer;
-    transition: all 0.3s ease;
+    overflow-y: visible;
 }
 
 main .btn-add:hover,
-main .btn-add:active,
 main .btn-add:focus {
+    transform: translateY(2px);
     background-color: var(--warna5);
     border-color: var(--warna2);
     color: var(--warna1);
+    box-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.35),
+        0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+main .btn-add:active {
+    transform: translateY(4px);
+    box-shadow: none;
 }
 
 
-main .btn-sm-1 {
+
+main .btn-alt-1,
+main .btn-alt-2 {
+    margin-bottom: 10px;
+    color: var(--warna0);
+    /* efek baru */
+    box-shadow:
+        0 4px 0 rgba(0, 0, 0, 0.35),
+        0 5px 10px rgba(0, 0, 0, 0.25);
+    transition: all 0.25s ease;
+    cursor: pointer;
+    overflow-y: visible;
+}
+
+/* warna default masing-masing */
+main .btn-alt-1 {
     background-color: var(--warna3);
     border: 4px solid var(--warna3);
-    color: var(--warna0);
-    cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-main .btn-sm-2 {
+main .btn-alt-2 {
     background-color: var(--warna4);
     border: 4px solid var(--warna4);
-    color: var(--warna0);
-    cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-main .btn-sm-1:hover,
-main .btn-sm-1:active,
-main .btn-sm-1:focus,
-main .btn-sm-2:hover,
-main .btn-sm-2:active,
-main .btn-sm-2:focus {
-    background-color: var(--warna5) !important;
-    border-color: var(--warna2) !important;
-    color: var(--warna1) !important;
-    outline: none;
+
+/* Efek hover / focus */
+main .btn-alt-1:hover,
+main .btn-alt-1:focus,
+main .btn-alt-2:hover,
+main .btn-alt-2:focus {
+    transform: translateY(2px);
+    background-color: var(--warna5);
+    border-color: var(--warna2);
+    color: var(--warna1);
+    box-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.35),
+        0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Efek active */
+main .btn-alt-1:active,
+main .btn-alt-2:active {
+    transform: translateY(4px);
     box-shadow: none;
 }
 
@@ -710,8 +942,8 @@ main .btn-sm-2:focus {
 
 /* Kecilkan tombol */
 #lessonTree .btn-sm,
-#lessonTree .btn-sm-1,
-#lessonTree .btn-sm-2 {
+#lessonTree .btn-alt-1,
+#lessonTree .btn-alt-2 {
     padding: 2px 6px !important;
     font-size: 11px !important;
 }
@@ -751,48 +983,44 @@ main .btn-sm-2:focus {
 
 
 #chatBox {
-    height: 350px;
+    height: 300px;
     overflow-y: auto;
     background: #e5ddd5;
     padding: 15px;
     border-radius: 10px;
 }
 
-.bubble-admin,
-.bubble-user,
-.bubble-system {
-    max-width: 60%;
-    padding: 8px 12px;
-    border-radius: 14px;
-    font-size: 14px;
-    margin-bottom: 6px;
-    word-wrap: break-word;
-    line-height: 1.35;
-}
-
-.bubble-admin {
-    background: #d2f8c2;
-    color: #111;
-    margin-left: auto;
-    border-bottom-right-radius: 4px;
-}
-
-.bubble-user {
-    background: #fff;
-    color: #111;
-    margin-right: auto;
-    border-bottom-left-radius: 4px;
-}
-
-.bubble-system {
-    max-width: 50%;
-    background: #d79771;
-    color: #333;
-    margin: 10px auto;
-    text-align: center;
-    font-style: italic;
+/* Pesan saya → hijau kanan */
+.bubble-me {
+    background: #d4f8c4;
+    padding: 10px;
     border-radius: 10px;
+    margin: 6px 0;
+    max-width: 75%;
+    margin-left: auto !important;
 }
+
+/* Pesan lawan bicara → putih kiri */
+.bubble-other {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 6px 0;
+    max-width: 75%;
+    margin-right: auto !important;
+}
+
+/* Sistem */
+.bubble-system {
+    background: #dfc9b3;
+    padding: 8px 12px;
+    border-radius: 6px;
+    width: fit-content;
+    margin: 15px auto;
+    text-align: center;
+    font-size: 14px;
+}
+
 
 /* Nama pengirim */
 .sender-name {
@@ -809,23 +1037,118 @@ main .btn-sm-2:focus {
     text-align: right;
 }
 
+
+
+.swal2-container {
+    position: fixed !important;
+}
+
+
+@media (max-width: 768px) {
+
+    .ribbon-container {
+        margin-left: 0;
+    }
+
+    .ribbon-wrapper {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .ribbon-tail-left,
+    .ribbon-tail-right {
+        width: 40px;
+        top: 5px;
+    }
+
+    .ribbon-tail-left {
+        left: -40px;
+    }
+
+    .ribbon-tail-right {
+        right: -40px;
+    }
+
+    .ribbon-tail-inner {
+        width: 100%;
+        height: 100%;
+    }
+
+    .ribbon-main h3 {
+        font-size: 1.5rem;
+    }
+
+    .card-custom {
+        min-height: auto !important;
+
+    }
+
+    .sidebar {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        margin-left: 250px;
+    }
+}
+
 @media (min-width: 768px) {
     .video-box {
         width: 80%;
     }
 }
 
-.swal2-container {
-    position: fixed !important;
-}
 
-@media (max-width: 768px) {
-    .bg-custom {
-        width: 100%;
-        margin-left: 0;
-        border-radius: 20px;
-        justify-content: center;
+
+@media (max-width: 992px) {
+    .welcome-illustration img {
+        display: none !important;
+        max-width: 0px;
     }
 
+    .size-card {
+        min-height: auto;
+    }
+}
 
+/* Wrapper item */
+.file-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+/* Area thumbnail, ukuran seragam */
+.file-thumb {
+    width: 100%;
+    height: 110px;
+    /* ukuran thumbnail seragam */
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Gambar otomatis crop rapi */
+.thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* gambar rapi, tidak gepeng */
+    border-radius: 6px;
+}
+
+/* Nama file */
+.file-name {
+    margin-top: 4px;
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

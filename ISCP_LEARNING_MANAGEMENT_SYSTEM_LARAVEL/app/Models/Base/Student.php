@@ -7,8 +7,6 @@
 namespace App\Models\Base;
 
 use App\Models\Classroom;
-use App\Models\ComplaintHistoryStudent;
-use App\Models\ComplaintMessagesStudent;
 use App\Models\ExercisePoint;
 use App\Models\PostChildComment;
 use App\Models\PostComment;

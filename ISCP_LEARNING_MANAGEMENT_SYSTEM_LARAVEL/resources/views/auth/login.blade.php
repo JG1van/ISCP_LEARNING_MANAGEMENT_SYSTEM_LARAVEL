@@ -4,13 +4,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Castle Gate Login | SciMedia Online</title>
+    <title>Login | SciMedia Online</title>
 
     <!-- Optional Bootstrap for basic layout/reset -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap');
+
         :root {
             --stone-dark: #2a2a2a;
             --stone-light: #6C6C6C;
@@ -33,21 +35,40 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #1a1a1a;
-            /* Stone Wall Texture Pattern */
-            background-image:
+            font-family: 'Cinzel', serif;
+            overflow: hidden;
+            perspective: 1500px;
+            background-color: #753422;
+            /* background-image:
                 linear-gradient(335deg, rgba(0, 0, 0, 0.3) 23px, transparent 23px),
                 linear-gradient(155deg, rgba(0, 0, 0, 0.3) 23px, transparent 23px),
                 linear-gradient(335deg, rgba(0, 0, 0, 0.3) 23px, transparent 23px),
                 linear-gradient(155deg, rgba(0, 0, 0, 0.3) 23px, transparent 23px);
             background-size: 58px 58px;
-            background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
-            font-family: 'Times New Roman';
-            overflow: hidden;
-            perspective: 1500px;
+            background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px; */
+
         }
 
-        /* Ambient Fog */
+        #wall {
+
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 120vw;
+            height: 120vh;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            z-index: -2;
+            /* Dibawah efek body::before & body::after */
+            pointer-events: none;
+        }
+
+        .brick {
+            background-color: #8a4b38;
+            box-sizing: border-box;
+        }
+
         body::after {
             content: '';
             position: absolute;
@@ -60,7 +81,6 @@
             z-index: -1;
         }
 
-        /* ---------------- CASTLE GATE STRUCTURE ---------------- */
         .castle-gate-container {
             position: relative;
             width: 460px;
@@ -70,20 +90,19 @@
             align-items: flex-end;
         }
 
-        /* Stone Arch Frame */
         .stone-arch {
             position: absolute;
             inset: -20px;
             border-radius: 240px 240px 10px 10px;
-            background:
+            /* background:
                 radial-gradient(circle at 50% 0%, transparent 60%, #1a1a1a 100%),
-                repeating-linear-gradient(45deg, var(--stone-base), var(--stone-base) 10px, var(--stone-light) 12px, var(--stone-light) 20px);
+                repeating-linear-gradient(45deg, var(--stone-base), var(--stone-base) 10px, var(--stone-light) 12px, var(--stone-light) 20px); */
+            background: repeating-conic-gradient(from 0deg, var(--stone-base) 0deg 15deg, var(--stone-light) 15deg 30deg);
             box-shadow:
                 inset 0 0 30px #000,
                 0 10px 30px rgba(0, 0, 0, 0.8);
             z-index: 10;
             pointer-events: none;
-            /* Let clicks pass through to door */
             border: 8px solid #333;
             border-bottom: none;
         }
@@ -97,17 +116,34 @@
             z-index: 99;
         }
 
-        /* Door Panels */
         .door-panel {
             position: absolute;
             top: 0;
             width: 50%;
             height: 100%;
             background: var(--wood-light);
-            /* Realistic Wood Texture */
-            background-image: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0px, rgba(0, 0, 0, 0.1) 2px, transparent 2px, transparent 4px),
+
+            /* 👇 Layer 1 — Pola Kayu Gelombang Vertikal */
+            background-image:
+                url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='300'><path d='M40 0 C0 75 80 225 40 300' stroke='rgba(0,0,0,0.15)' stroke-width='3' fill='none'/><path d='M90 0 C50 75 130 225 90 300' stroke='rgba(0,0,0,0.15)' stroke-width='3' fill='none'/><path d='M140 0 C100 75 180 225 140 300' stroke='rgba(0,0,0,0.15)' stroke-width='3' fill='none'/></svg>"),
+
+                /* 👇 Layer 2 — Serat kayu tipis horizontal */
+                repeating-linear-gradient(90deg,
+                    rgba(0, 0, 0, 0.08) 0px,
+                    rgba(0, 0, 0, 0.08) 2px,
+                    transparent 2px,
+                    transparent 4px),
+
+                /* 👇 Layer 3 — Shading atas–bawah */
                 linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent, rgba(0, 0, 0, 0.8));
-            background-size: 100% 100%, 100% 100%;
+            background-size:
+                150px 300px,
+                100% 100%,
+                100% 100%;
+            background-repeat:
+                repeat,
+                repeat,
+                no-repeat;
             transform-style: preserve-3d;
             transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
@@ -117,6 +153,7 @@
             align-items: center;
             border: 2px solid #1a1a1a;
         }
+
 
         .door-panel.left {
             left: 0;
@@ -133,7 +170,6 @@
         }
 
 
-        /* Metal Decorations (Studs & Hinges) */
         .metal-band {
             width: 100%;
             height: 40px;
@@ -153,7 +189,6 @@
             box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
-        /* Ring Handles */
         .handle-ring {
             width: 40px;
             height: 40px;
@@ -175,7 +210,6 @@
             border-right-color: #666;
         }
 
-        /* Open State */
         .castle-gate-container.open .door-panel.left {
             transform: rotateY(-110deg);
         }
@@ -184,7 +218,6 @@
             transform: rotateY(110deg);
         }
 
-        /* ---------------- INTERIOR (LOGIN FORM) ---------------- */
         .interior {
             position: absolute;
             inset: 10px;
@@ -208,7 +241,6 @@
             z-index: 99;
         }
 
-        /* Torch Light Glow inside */
         .interior::before {
             content: '';
             position: absolute;
@@ -253,14 +285,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid var(--metal);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
             cursor: pointer;
             transition: transform 0.3s;
         }
 
         .shield-logo:hover {
-            transform: scale(1.05);
+            transform: scale(1.2);
         }
 
         .shield-logo img {
@@ -268,10 +299,9 @@
             opacity: 0.8;
         }
 
-        /* Typography */
         h2 {
             color: #3e2723;
-            font-family: 'Cinzel', serif;
+
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -281,13 +311,12 @@
             padding-bottom: 5px;
         }
 
-        /* Inputs */
         .medieval-input {
             background: transparent;
             border: none;
             border-bottom: 2px solid #8b4513;
             border-radius: 0;
-            font-family: 'Times New Roman', serif;
+
             font-size: 1.1rem;
             color: #3e2723;
             box-shadow: none !important;
@@ -306,11 +335,9 @@
             font-style: italic;
         }
 
-        /* Wax Seal Button */
         .btn-wax {
             background: radial-gradient(circle at 30% 30%, #a83232, #6d1a1a);
             color: #fff;
-            font-family: 'Cinzel', serif;
             border: none;
             width: 100%;
             padding: 12px;
@@ -357,18 +384,6 @@
             right: -60px;
         }
 
-        .torch::before {
-            /* Holder */
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 10px;
-            height: 30px;
-            background: #555;
-            transform: translateX(-50%) rotate(45deg);
-        }
 
         .flame {
             position: absolute;
@@ -379,7 +394,6 @@
             height: 28px;
             background: var(--fire-outer);
             border-radius: 50% 50% 40% 40%;
-            /* arah api vertikal */
             box-shadow: 0 0 20px var(--fire-outer), 0 0 40px var(--fire-inner);
             animation: burn 0.5s infinite alternate;
             transform-origin: center bottom;
@@ -414,7 +428,6 @@
             }
         }
 
-        /* Dust Particles */
         .particle {
             position: absolute;
             background: rgba(200, 190, 170, 0.6);
@@ -440,17 +453,14 @@
             }
         }
 
-        /* ========= RESPONSIVE MODE ========= */
         @media (max-width: 768px) {
 
-            /* Hilangkan pintu */
             .door-frame,
             .stone-arch,
             .torch {
                 display: none !important;
             }
 
-            /* Kontainer diperkecil biar pas layar hp/tablet */
             .castle-gate-container {
                 width: 100%;
                 max-width: 400px;
@@ -458,21 +468,22 @@
                 margin-top: 40px;
             }
 
-            /* Interior langsung tampil clean */
             .interior {
                 border-radius: 20px;
                 inset: 0;
                 box-shadow: none;
             }
 
-            /* Scroll-paper tampil normal */
+            .interior::after {
+                background: none;
+            }
+
             .scroll-paper {
                 margin-top: 0;
                 transform: scale(1) translateY(0) !important;
                 opacity: 1 !important;
             }
 
-            /* Matikan animasi open */
             .castle-gate-container .door-panel {
                 transform: none !important;
             }
@@ -486,7 +497,6 @@
             .torch {
                 display: none !important;
                 pointer-events: none !important;
-                /* aman */
             }
 
             .castle-gate-container {
@@ -514,8 +524,6 @@
                 opacity: 1 !important;
                 width: 100% !important;
             }
-
-            /* HAPUS pointer-events untuk castleGate */
         }
 
         .scroll-paper.hide {
@@ -527,6 +535,7 @@
 </head>
 
 <body>
+
     @if (session('error'))
         <script>
             Swal.fire({
@@ -559,7 +568,7 @@
             });
         </script>
     @endif
-
+    <div id="wall"></div>
 
     <div class="castle-gate-container" id="castleGate">
 
@@ -570,14 +579,12 @@
         <div class="torch right">
             <div class="flame"></div>
         </div>
-
-        <!-- Stone Arch Overlay -->
         <div class="stone-arch"></div>
 
         <!-- The Interior (Form) -->
         <div class="interior">
             <div class="scroll-paper">
-                <div class="shield-logo" id="closeBtn" title="Close Gate">
+                <div class="shield-logo" id="closeBtn">
                     <!-- Simple SVG Shield Icon -->
                     <img src="{{ asset('images/logo.webp') }}" alt="Logo" id="closeDoor">
                 </div>
@@ -656,16 +663,14 @@
 
         function closeGate(e) {
             e.stopPropagation();
-
-            // animasi form keluar dulu
             scrollPaper.classList.add("hide");
-
-            // tunggu 600ms baru pintu menutup
             setTimeout(() => {
                 isOpen = false;
                 gate.classList.remove("open");
-                scrollPaper.classList.remove("hide"); // reset agar saat dibuka lagi normal
-            }, 600);
+                setTimeout(() => {
+                    scrollPaper.classList.remove("hide");
+                }, 300);
+            }, 200);
         }
 
         gate.addEventListener("click", openGate);
@@ -675,6 +680,57 @@
 
         document.querySelectorAll("input, button").forEach(el => {
             el.addEventListener("click", e => e.stopPropagation());
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const wall = document.getElementById("wall");
+
+            const rows = 15;
+            const bricksPerRow = 12;
+
+            const colors = [
+                "#8a4b38",
+                "#953a2d",
+                "#9e5e4b",
+                "#933125",
+                "#7d4436",
+            ];
+
+            const totalBricks = Math.floor(rows * bricksPerRow * 1.5);
+
+            for (let i = 0; i < totalBricks; i++) {
+                const brick = document.createElement("div");
+                brick.classList.add("brick");
+
+                // Ukuran acak
+                const width = Math.floor(Math.random() * 60) + 80;
+                const height = Math.floor(Math.random() * 10) + 55;
+                brick.style.width = `${width}px`;
+                brick.style.height = `${height}px`;
+
+                // Warna acak
+                brick.style.backgroundColor =
+                    colors[Math.floor(Math.random() * colors.length)];
+
+                // Border-radius acak
+                const b1 = Math.floor(Math.random() * 10) + 2;
+                const b2 = Math.floor(Math.random() * 10) + 2;
+                const b3 = Math.floor(Math.random() * 10) + 2;
+                const b4 = Math.floor(Math.random() * 10) + 2;
+                brick.style.borderRadius = `${b1}px ${b2}px ${b3}px ${b4}px`;
+
+                // Rotasi acak
+                const rotation = (Math.random() * 2 - 1).toFixed(1);
+                brick.style.transform = `rotate(${rotation}deg)`;
+
+                // Margin acak
+                const marginX = Math.floor(Math.random() * 4) + 1;
+                const marginY = Math.floor(Math.random() * 4) + 1;
+                brick.style.margin = `${marginY}px ${marginX}px`;
+
+                wall.appendChild(brick);
+            }
         });
     </script>
 
